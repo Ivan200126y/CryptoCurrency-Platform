@@ -6,8 +6,8 @@ import jakarta.validation.constraints.Email;
 import lombok.Data;
 
 @Entity
-@Table(name = "users")
 @Data
+@Table(name = "users")
 public class User {
 
     @Id

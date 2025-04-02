@@ -20,16 +20,16 @@ public class UserRestController {
     private final UserService userService;
     private final AuthenticationHelper authenticationHelper;
 
-    @GetMapping("/{id}")
-    public User getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
-        try {
-            User user = userService.getById(id);
-            User userFromHeader = authenticationHelper.tryGetUser(headers);
-            return userService.getById(id);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (UnauthorizedOperationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        }
-    }
+//    @GetMapping("/{id}")
+//    public User getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+//        try {
+//            User user = userService.getById(id);
+//            User userFromHeader = authenticationHelper.tryGetUser(headers);
+//            return userService.getById(id);
+//        } catch (EntityNotFoundException e) {
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+//        } catch (UnauthorizedOperationException e) {
+//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+//        }
+//    }
 }

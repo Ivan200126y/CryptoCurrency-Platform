@@ -27,10 +27,10 @@ public class AuthenticationHelper {
         this.userService = userService;
     }
 
-    public User tryGetUser (HttpSession session) {
+    public User tryGetUser(HttpSession session) {
         String currentUser = (String) session.getAttribute("currentUser");
 
-        if(currentUser == null) {
+        if (currentUser == null) {
             throw new AuthenticationFailureException(AUTHENTICATION_ERROR);
         }
 
@@ -55,6 +55,7 @@ public class AuthenticationHelper {
         } catch (EntityNotFoundException e) {
             throw new AuthenticationFailureException(AUTHENTICATION_ERROR);
         }
+
     }
 
     private static String getUsername(String userInfo) {
@@ -71,5 +72,17 @@ public class AuthenticationHelper {
             throw new UnauthorizedOperationException(AUTHENTICATION_ERROR);
         }
         return userInfo.substring(firstSpace + 1);
+    }
+
+    public User verifyAuthentication(String username, String password) {
+        try {
+            User user = userService.getByUsername(username);
+            if(!user.getPassword().trim().equals(password)) {
+                throw new AuthenticationFailureException(INVALID_AUTHENTICATION_ERROR);
+            }
+            return user;
+        } catch (EntityNotFoundException e) {
+            throw new AuthenticationFailureException(INVALID_AUTHENTICATION_ERROR);
+        }
     }
 }

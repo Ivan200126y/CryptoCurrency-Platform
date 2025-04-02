@@ -2,17 +2,19 @@ package com.telerikacademy.web.cryptocurrency_trading_platform.models;
 
 import com.telerikacademy.web.cryptocurrency_trading_platform.enums.Status;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "transactions")
-@Data
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -28,5 +30,8 @@ public class Transaction {
     private Status status;
 
     @Column(name = "created_at")
-    private LocalDateTime cratedAt;
+    private LocalDateTime createdAt;
+
+    public Transaction() {
+    }
 }

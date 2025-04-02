@@ -6,18 +6,24 @@ import com.telerikacademy.web.cryptocurrency_trading_platform.models.Transaction
 import com.telerikacademy.web.cryptocurrency_trading_platform.models.User;
 import com.telerikacademy.web.cryptocurrency_trading_platform.repositories.TransactionRepository;
 import com.telerikacademy.web.cryptocurrency_trading_platform.repositories.UserRepository;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@AllArgsConstructor
 @Service
 public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
+
+    @Autowired
+    public TransactionServiceImpl(TransactionRepository transactionRepository,
+                                  UserRepository userRepository) {
+        this.transactionRepository = transactionRepository;
+        this.userRepository = userRepository;
+    }
 
     @Override
     public Transaction createIncomingTransaction(User user, Double amount) {
@@ -33,7 +39,7 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setAmount(amount);
         transaction.setUser(user);
         transaction.setStatus(Status.INCOMING);
-        transaction.setCratedAt(LocalDateTime.now());
+        transaction.setCreatedAt(LocalDateTime.now());
 
         transactionRepository.save(transaction);
 
@@ -54,7 +60,7 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setAmount(amount);
         transaction.setUser(user);
         transaction.setStatus(Status.OUTGOING);
-        transaction.setCratedAt(LocalDateTime.now());
+        transaction.setCreatedAt(LocalDateTime.now());
 
         user.setBalance(user.getBalance() - amount);
         userRepository.save(user);

@@ -5,15 +5,20 @@ import com.telerikacademy.web.cryptocurrency_trading_platform.exceptions.EntityN
 import com.telerikacademy.web.cryptocurrency_trading_platform.models.User;
 import com.telerikacademy.web.cryptocurrency_trading_platform.repositories.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import static com.telerikacademy.web.cryptocurrency_trading_platform.helpers.PermissionHelper.checkIfCreatorOrAdminForUser;
 
-@AllArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public User getById(int id) {
@@ -35,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getByUsername(String username) {
-        User user = userRepository.findByEmail(username);
+        User user = userRepository.findByUsername(username);
         if (user == null) {
             throw new EntityNotFoundException("User", "username", username);
         }
