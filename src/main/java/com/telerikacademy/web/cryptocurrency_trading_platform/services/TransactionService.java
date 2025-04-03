@@ -1,5 +1,6 @@
 package com.telerikacademy.web.cryptocurrency_trading_platform.services;
 
+import com.telerikacademy.web.cryptocurrency_trading_platform.enums.Status;
 import com.telerikacademy.web.cryptocurrency_trading_platform.models.Transaction;
 import com.telerikacademy.web.cryptocurrency_trading_platform.models.TransactionDTO;
 import com.telerikacademy.web.cryptocurrency_trading_platform.models.User;
@@ -15,7 +16,9 @@ public interface TransactionService {
 
     List<Transaction> filterTransactions(LocalDateTime startDate,
                                          LocalDateTime endDate,
-                                         String currency);
+                                         String currency,
+                                         User user,
+                                         Status status);
 
     List<TransactionDTO> sortTransactions(List<TransactionDTO> transactions,
                                           String sortBy,

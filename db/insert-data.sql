@@ -11,15 +11,15 @@ VALUES
     ('William', 'Anderson', 'williamanderson', 'williamanderson', 'william.anderson@example.com', '9012345678', 2500, false, true),
     ('Ava', 'Thomas', 'avathomas', 'avathomas', 'ava.thomas@example.com', '0123456789', 1200, false, false);
 
-INSERT INTO transactions (user_id, amount, status, created_at)
+INSERT INTO transactions (user_id, amount, status, created_at, currency)
 VALUES
-    (1, 100, 'PENDING', CURRENT_TIMESTAMP),
-    (2, 200, 'PENDING', CURRENT_TIMESTAMP),
-    (3, 400, 'COMPLETED', CURRENT_TIMESTAMP),
-    (1, 10.10, 'FAILED', CURRENT_TIMESTAMP),
-    (4, 50, 'COMPLETED', CURRENT_TIMESTAMP),
-    (5, 150, 'PENDING', CURRENT_TIMESTAMP),
-    (6, 300, 'COMPLETED', CURRENT_TIMESTAMP),
-    (7, 200, 'FAILED', CURRENT_TIMESTAMP),
-    (8, 1000, 'COMPLETED', CURRENT_TIMESTAMP),
-    (9, 500, 'PENDING', CURRENT_TIMESTAMP);
+    (1, 100, 'INCOMING', CURRENT_TIMESTAMP, 'BTC'),
+    (2, 200, 'OUTGOING', CURRENT_TIMESTAMP, 'BTC'),
+    (3, 400, 'OUTGOING', CURRENT_TIMESTAMP, 'BTC'),
+    (1, 10.10, 'OUTGOING', CURRENT_TIMESTAMP, 'BTC'),
+    (4, 50, 'OUTGOING', CURRENT_TIMESTAMP, 'ETH'),
+    (5, 150, 'INCOMING', CURRENT_TIMESTAMP, 'ETH'),
+    (6, 300, 'INCOMING', CURRENT_TIMESTAMP, 'ETH'),
+    (7, 200, 'INCOMING', CURRENT_TIMESTAMP, 'ETH'),
+    (8, 1000, 'INCOMING', CURRENT_TIMESTAMP, 'ETH'),
+    (9, 500, 'INCOMING', CURRENT_TIMESTAMP, 'ETH');

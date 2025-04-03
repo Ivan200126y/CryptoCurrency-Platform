@@ -1,10 +1,112 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/PageLayout.html :: head('Transactions')}"></head>
+<body class="d-flex flex-column min-vh-100">
+
+<nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
+<br/><br/>
+<header class="masthead">
+    <div class="container">
+        <div class="access-denied-title">Transactions</div>
+    </div>
+</header>
+
+
+<h1 class="text-center">Filter Transactions</h1>
+
+<form class="container my-3 p-3 bg-light rounded shadow-sm mb-3" th:action="@{/transactions/all}" method="get">
+    <div class="row g-2 align-items-center">
+
+        <div class="col-md-2">
+            <label class="form-label fw-bold text-gray-900" for="minDate">Start Date</label>
+            <input type="datetime-local" id="minDate" name="startDate" class="form-control" th:value="*{startDate}">
+        </div>
+
+        <div class="col-md-2">
+            <label class="form-label fw-bold text-gray-900" for="maxDate">End Date</label>
+            <input type="datetime-local" id="maxDate" name="endDate" class="form-control" th:value="*{endDate}">
+        </div>
+
+        <!-- Use d-flex to align Is Incoming, Sort By, and Order properly -->
+        <div class="col-md-2 d-flex flex-column">
+            <label class="form-label fw-bold text-gray-900" for="isIncoming">Is Incoming</label>
+            <select id="isIncoming" name="isIncoming" class="form-select">
+                <option value="" th:selected="${staus == null}">Any</option>
+                <option value="true" th:selected="${status == 'INCOMING'}">Yes</option>
+                <option value="false" th:selected="${status == OUTGOING}">No</option>
+            </select>
+        </div>
+
+        <div class="col-md-2 d-flex flex-column">
+            <label class="form-label fw-bold text-gray-900" for="sortBy">Sort By</label>
+            <select id="sortBy" name="sortBy" class="form-select">
+                <option value="amount" th:selected="${sortBy == 'amount'}">Amount</option>
+                <option value="date" th:selected="${sortBy == 'date'}">Date</option>
+            </select>
+        </div>
+
+        <div class="col-md-2 d-flex flex-column">
+            <label class="form-label fw-bold text-gray-900" for="isAscending">Order</label>
+            <select id="isAscending" name="isAscending" class="form-select">
+                <option value="true" th:selected="${isAscending == true}">Ascending</option>
+                <option value="false" th:selected="${isAscending == false}">Descending</option>
+            </select>
+        </div>
+
+        <!-- Centered Filter Button -->
+        <div class="col-md-12 text-center mt-2">
+            <button class="btn btn-primary px-4" type="submit">Filter</button>
+        </div>
+    </div>
+</form>
+
+
+<h2 class="text-center mt-5" th:if="${transactions.isEmpty()}">No Results Found</h2>
+<h2 class="text-center" th:unless="${transactions.isEmpty()}">Transaction Results</h2>
+
+<div class="container mt-4">
+    <div class="list-group mb-5">
+        <div th:each="transaction : ${transactions}"
+             class="list-group-item d-flex justify-content-between align-items-center border-bottom py-3">
+
+            <div class="d-flex flex-column">
+                    <span th:text="${transaction.currency}"></span>
+            </div>
+
+            <span class="fw-bold px-2 py-1 rounded font-monospace"
+                  th:text="${#numbers.formatDecimal(transaction.amount, 1, 2)}"
+                  th:classappend="${transaction.status.name() == 'INCOMING'} ? 'text-success' :
+                               (${transaction.status.name() == 'OUTGOING'} ? 'text-warning' :
+                               'text-danger')">
+            </span>
+
+            <span class="badge"
+                  th:text="${transaction.status}"
+                  th:classappend="${transaction.status.name() == 'INCOMING'} ? 'text-success' :
+                               (${transaction.status.name() == 'OUTGOING'} ? 'text-warning' :
+                               'text-danger')">
+            </span>
+        </div>
+    </div>
+
+<!--    <nav th:unless="${transactions.isEmpty()}">-->
+<!--        <ul class="pagination justify-content-center">-->
+<!--            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">-->
+<!--                <a class="page-link" th:href="@{/transactions/all(page=${currentPage - 1}, size=${size}, sortBy=${sortBy}, isAscending=${isAscending}, startDate=${startDate}, endDate=${endDate}, recipient=${recipient}, isIncoming=${isIncoming})}">Previous</a>-->
+<!--            </li>-->
+<!--            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"-->
+<!--                th:classappend="${i == currentPage} ? 'active'">-->
+<!--                <a class="page-link" th:href="@{/transactions/all(page=${i}, size=${size}, sortBy=${sortBy}, isAscending=${isAscending}, startDate=${startDate}, endDate=${endDate}, recipient=${recipient}, isIncoming=${isIncoming})}" th:text="${i + 1}">1</a>-->
+<!--            </li>-->
+<!--            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">-->
+<!--                <a class="page-link" th:href="@{/transactions/all(page=${currentPage + 1}, size=${size}, sortBy=${sortBy}, isAscending=${isAscending}, startDate=${startDate}, endDate=${endDate}, recipient=${recipient}, isIncoming=${isIncoming})}">Next</a>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </nav>-->
+</div>
+
+<footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
+<div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
 
 </body>
 </html>

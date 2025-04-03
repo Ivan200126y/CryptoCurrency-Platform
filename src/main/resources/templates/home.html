@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/PageLayout.html :: head('Home')}"></head>
+<body id="page-top" class="d-flex flex-column min-vh-100">
+<nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid mt-5 pt-5">
+
+                <!-- Page Heading -->
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+                       th:href="@{/auth/account/cards/new}"><i
+                            class="fas fa-credit-card fa-sm text-white-50"></i> Add Card</a>
+                </div>
+
+                <!-- Content Row -->
+                <div class="row">
+
+                    <!-- Earnings (Monthly) Card Example -->
+<!--                    <div class="col-xl-3 col-md-6 mb-4">-->
+<!--                        <div class="card border-left-primary shadow h-100 py-2">-->
+<!--                            <div class="card-body">-->
+<!--                                <div class="row no-gutters align-items-center">-->
+<!--                                    <div class="col mr-2">-->
+<!--                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">-->
+<!--                                            Transactions (Incoming)-->
+<!--                                        </div>-->
+<!--&lt;!&ndash;                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"&ndash;&gt;-->
+<!--&lt;!&ndash;                                             th:text="${incomingTransactions}">&ndash;&gt;-->
+<!--&lt;!&ndash;                                        </div>&ndash;&gt;-->
+<!--                                    </div>-->
+<!--                                    <div class="col-auto">-->
+<!--                                        <a th:href="@{/transactions/all(isIncoming=true)}"-->
+<!--                                           style="text-decoration: none;">-->
+<!--                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>-->
+<!--                                        </a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+<!--                    &lt;!&ndash; Earnings (Monthly) Card Example &ndash;&gt;-->
+<!--                    <div class="col-xl-3 col-md-6 mb-4">-->
+<!--                        <div class="card border-left-danger shadow h-100 py-2">-->
+<!--                            <div class="card-body">-->
+<!--                                <div class="row no-gutters align-items-center">-->
+<!--                                    <div class="col mr-2">-->
+<!--                                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">-->
+<!--                                            Total Losses-->
+<!--                                        </div>-->
+<!--                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"-->
+<!--                                             th:text="${outgoingTransactions}">-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-auto">-->
+<!--                                        <a th:href="@{/transactions/all(isIncoming=false)}"-->
+<!--                                           style="text-decoration: none;">-->
+<!--                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>-->
+<!--                                        </a>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-info shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                            Current Balance
+                                        </div>
+                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"
+                                             th:text="${currentUser.balance}">
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pending Requests Card Example -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                            Total Transactions
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800"
+                                             th:text="${countTransactions}">18
+                                        </div>
+                                    </div>
+<!--                                    <div class="col-auto"-->
+<!--                                         th:if="${currentUser.cards!=null and not #lists.isEmpty(currentUser.cards)}">-->
+<!--                                        <a th:href="@{/auth/account/cards}" style="text-decoration: none;">-->
+<!--                                            <i class="fas fa-credit-card fa-2x text-gray-300"></i>-->
+<!--                                        </a>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-auto" th:unless="${not #lists.isEmpty(currentUser.cards)}">-->
+<!--                                        <i class="fas fa-credit-card fa-2x text-gray-300"></i>-->
+<!--                                    </div>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Row -->
+
+                <div class="row">
+                    <!-- Area Chart -->
+                    <div class="col-xl-8 col-lg-7">
+                        <div class="card shadow mb-4">
+                            <!-- Card Header - Dropdown -->
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+
+
+                                <h6 class="m-0 font-weight-bold text-primary">Top 20 Crypto Prices</h6>
+                                <div class="dropdown no-arrow">
+                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                         aria-labelledby="dropdownMenuLink">
+                                        <div class="dropdown-header">Dropdown Header:</div>
+                                        <a class="dropdown-item" href="#">Action</a>
+                                        <a class="dropdown-item" href="#">Another action</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#">Something else here</a>
+                                    </div>
+                                </div>
+                                <!--                                <select id="transactionPeriod" class="form-control-sm">-->
+                                <!--                                    <option value="7">Last 7 days</option>-->
+                                <!--                                    <option value="30">Last 30 days</option>-->
+                                <!--                                    <option value="365">Last Year</option>-->
+                                <!--                                </select>-->
+                            </div>
+                            <!-- Card Body -->
+                            <div class="card-body">
+                                <div class="d-flex justify-content-center align-items-center" style="height: 300px;">
+                                    <h2 class="text-muted">Coming Soon!</h2>
+                                    <!--                                    <canvas id="earningsChart"></canvas>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-lg-7">
+                        <div class="card shadow mb-4">
+                            <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <a class="m-0 font-weight-bold text-primary" th:href="@{/auth/account}">Account
+                                    Information</a>
+                                <div class="dropdown no-arrow">
+                                    <div>
+                                        <a class="btn btn-primary" th:href="@{auth/account/update}">Update Info</a>
+                                    </div>
+                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                         aria-labelledby="dropdownMenuLink">
+                                        <div class="dropdown-header">Dropdown Header:</div>
+                                        <a class="dropdown-item" href="#">Action</a>
+                                        <a class="dropdown-item" href="#">Another action</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#">Something else here</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="text-center">
+<!--                                    <h5 class="font-weight-bold" th:text="${currentUser.fullName}">John Doe</h5>-->
+<!--                                    <p class="text-gray-600" th:text="${currentUser.email}">johndoe@example.com</p>-->
+                                </div>
+                                <hr>
+                                <div class="text-left">
+                                    <p><strong>Username:</strong> <span
+                                            th:text="${currentUser.username}">johndoe
+                                    </span></p>
+                                    <p><strong>Phone number:</strong> <span
+                                            th:text="${currentUser.phoneNumber}">
+                                        1000
+                                    </span>
+                                    </p>
+                                    <p><strong>Email:</strong> <span th:text="${currentUser.email}">1000</span>
+                                    </p>
+                                    <p><strong>Balance:</strong> $<span th:text="${currentUser.balance}">1000</span>
+                                    </p>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-6 mb-4">
+
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                                <a class="m-0 font-weight-bold text-primary" th:href="@{/transactions/all}">
+                                    Transactions
+                                </a>
+
+                                <div>
+                                    <a class="btn btn-primary" th:href="@{/transactions/new}">
+                                        New Transaction
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Date</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="transaction : ${transactions}">
+                                        <td th:text="${transaction.status}"></td>
+                                        <td th:text="${transaction.amount}"></td>
+                                        <td th:text="${#temporals.format(transaction.createdAt, 'yyyy-MM-dd')}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-4">
+                        <!-- Illustrations -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <a class="m-0 font-weight-bold text-primary"
+                                   th:href="@{https://edition.cnn.com/business/index.html}"
+                                   target="_blank">Top 20 Crypto</a>
+                            </div>
+                            <div class="card-body">
+                                <ul id="cryptoList">
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" href="login.html">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function fetchLatestPrices() {
+        try {
+            const response = await fetch('/api/crypto');
+            const newsData = await response.json();
+
+            let cryptoList = document.getElementById("cryptoList");
+            cryptoList.innerHTML = "";
+
+            newsData.forEach(news => {
+                let listItem = document.createElement("li");
+                listItem.textContent = news;
+                cryptoList.appendChild(listItem);
+            });
+
+        } catch (error) {
+            console.error("Error fetching cryptos:", error);
+        }
+    }
+
+    fetchLatestPrices();
+</script>
+
+<!--<script>-->
+<!--    var loggedInUsername = "[[${session.currentUser}]]";-->
+<!--</script>-->
+
+<!--<script src="/static/js/demo/chart.js"></script>-->
+
+<!--<script>-->
+<!--    document.addEventListener("DOMContentLoaded", function () {-->
+<!--        var ctx = document.getElementById("earningsChart").getContext("2d");-->
+
+<!--        //var loggedInUsername = window.loggedInUsername;-->
+
+<!--        function fetchEarnings(days) {-->
+<!--            let startDate = new Date().toISOString();-->
+<!--            let endDate = new Date();-->
+<!--            endDate.setDate(endDate.getDate() - days);-->
+<!--            endDate = endDate.toISOString();-->
+
+<!--            let url = `/api/transactions/filter?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}&username=${encodeURIComponent(loggedInUsername)}`;-->
+
+<!--            fetch(url, {-->
+<!--                method: "GET",-->
+<!--                headers: {-->
+<!--                    "Content-Type": "application/json",-->
+<!--                    "Accept": "application/json"-->
+<!--                },-->
+<!--                credentials: "include" // Ensure session authentication is used-->
+<!--            })-->
+<!--                .then(response => {-->
+<!--                    if (!response.ok) {-->
+<!--                        throw new Error("Server error");-->
+<!--                    }-->
+<!--                    return response.json();-->
+<!--                })-->
+<!--                .then(data => {-->
+<!--                    updateChart(data);-->
+<!--                })-->
+<!--                .catch(error => console.error("Error fetching earnings:", error));-->
+<!--        }-->
+
+<!--        function updateChart(data) {-->
+<!--            let labels = Object.keys(data);-->
+<!--            let values = Object.values(data);-->
+
+<!--            if (window.earningsChart) {-->
+<!--                window.earningsChart.destroy();-->
+<!--            }-->
+
+<!--            window.earningsChart = new Chart(ctx, {-->
+<!--                type: 'bar',-->
+<!--                data: {-->
+<!--                    labels: labels,-->
+<!--                    datasets: [{-->
+<!--                        label: "Total Transactions ($)",-->
+<!--                        data: values,-->
+<!--                        borderColor: "#4e73df",-->
+<!--                        backgroundColor: "rgba(78, 115, 223, 0.1)",-->
+<!--                        borderWidth: 2-->
+<!--                    }]-->
+<!--                },-->
+<!--                options: {-->
+<!--                    responsive: true,-->
+<!--                    maintainAspectRatio: false,-->
+<!--                    scales: {-->
+<!--                        x: {title: {display: true, text: 'Date'}},-->
+<!--                        y: {title: {display: true, text: 'Amount ($)'}, beginAtZero: true}-->
+<!--                    }-->
+<!--                }-->
+<!--            });-->
+<!--        }-->
+
+<!--        fetchEarnings(7);-->
+
+<!--        document.getElementById("transactionPeriod").addEventListener("change", function () {-->
+<!--            fetchEarnings(this.value);-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+
+
+<!--&lt;!&ndash; Bootstrap core JavaScript&ndash;&gt;-->
+<!--<script src="vendor/jquery/jquery.min.js"></script>-->
+<!--<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>-->
+
+<!--&lt;!&ndash; Core plugin JavaScript&ndash;&gt;-->
+<!--<script src="vendor/jquery-easing/jquery.easing.min.js"></script>-->
+
+<!--&lt;!&ndash; Custom scripts for all pages&ndash;&gt;-->
+<!--<script src="js/sb-admin-2.min.js"></script>-->
+
+<!--&lt;!&ndash; Page level plugins &ndash;&gt;-->
+<!--<script src="vendor/chart.js/Chart.min.js"></script>-->
+
+<!--&lt;!&ndash; Page level custom scripts &ndash;&gt;-->
+<!--<script src="js/demo/chart-area-demo.js"></script>-->
+<!--<script src="js/demo/chart-pie-demo.js"></script>-->
+
+<!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
+
+
+<!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
+
+<footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
+<div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
+</body>
+
+</html>

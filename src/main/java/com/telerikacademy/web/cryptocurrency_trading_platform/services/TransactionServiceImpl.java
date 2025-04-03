@@ -71,8 +71,18 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<Transaction> filterTransactions(LocalDateTime startDate, LocalDateTime endDate, String currency) {
-        return List.of();
+    public List<Transaction> filterTransactions(LocalDateTime startDate,
+                                                LocalDateTime endDate,
+                                                String currency,
+                                                User user,
+                                                Status status) {
+        return transactionRepository.findAll().stream()
+                .filter(t -> startDate == null || t.getCreatedAt().isAfter(startDate))
+                .filter(t -> endDate == null || t.getCreatedAt().isBefore(endDate))
+                .filter(t -> currency == null || t.getCurrency().equalsIgnoreCase(currency))
+                .filter(t -> user == null || t.getUser().getEmail().equalsIgnoreCase(user.getEmail()))
+                .filter(t -> status == null || t.getStatus().equals(status))
+                .toList();
     }
 
     @Override

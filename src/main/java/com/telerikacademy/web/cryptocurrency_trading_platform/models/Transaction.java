@@ -32,6 +32,9 @@ public class Transaction {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(name = "currency")
+    private String currency;
+
     public Transaction() {
     }
 }

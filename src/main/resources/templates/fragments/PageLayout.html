@@ -35,14 +35,7 @@
         </li>
 
         <li class="nav-item" th:if="${isAuthenticated}">
-          <a class="nav-link text-dark font-weight-bold" th:href="@{/transactions/deposit}">Deposit</a>
-        </li>
-
-        <li class="nav-item" th:if="${isAuthenticated}">
-          <a class="nav-link text-dark font-weight-bold"
-             th:href="@{/auth/account/cards}">
-            <span th:text="'Manage Cards'"></span>
-          </a>
+          <a class="nav-link text-dark font-weight-bold" th:href="@{/transactions/new}">Create Transaction</a>
         </li>
 
         <li class="nav-item" th:if="${isAuthenticated} and ${session.isAdmin}">

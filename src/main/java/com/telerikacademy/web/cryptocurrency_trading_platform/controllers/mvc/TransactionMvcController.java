@@ -1,21 +1,24 @@
 package com.telerikacademy.web.cryptocurrency_trading_platform.controllers.mvc;
 
+import com.telerikacademy.web.cryptocurrency_trading_platform.enums.Status;
 import com.telerikacademy.web.cryptocurrency_trading_platform.exceptions.AuthenticationFailureException;
 import com.telerikacademy.web.cryptocurrency_trading_platform.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.cryptocurrency_trading_platform.helpers.AuthenticationHelper;
+import com.telerikacademy.web.cryptocurrency_trading_platform.models.Transaction;
 import com.telerikacademy.web.cryptocurrency_trading_platform.models.TransactionDtoCreate;
 import com.telerikacademy.web.cryptocurrency_trading_platform.models.User;
 import com.telerikacademy.web.cryptocurrency_trading_platform.services.TransactionService;
 import com.telerikacademy.web.cryptocurrency_trading_platform.services.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Controller
 @RequestMapping("/transactions")
@@ -40,9 +43,24 @@ public class TransactionMvcController {
 
     @GetMapping("/all")
     public String showtransactions(Model model,
-                                   HttpSession session) {
+                                   HttpSession session,
+                                   @RequestParam(required = false, defaultValue = "0") int page,
+                                   @RequestParam(required = false, defaultValue = "5") int size,
+                                   @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+                                   @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
+                                   @RequestParam(required = false) Double amount,
+                                   @RequestParam(required = false) Status status,
+                                   @RequestParam(required = false) String currency) {
         User user = authenticationHelper.tryGetUser(session);
         session.setAttribute("currentUser", user.getUsername());
+        List<Transaction> transactions = transactionService.filterTransactions(null, null, null, user, null);
+        session.setAttribute("currentUser", user.getUsername());
+        model.addAttribute("transactions", transactions);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+        model.addAttribute("amount", amount);
+        model.addAttribute("status", status);
+        model.addAttribute("currency", currency);
         return "TransactionsView";
     }
 
