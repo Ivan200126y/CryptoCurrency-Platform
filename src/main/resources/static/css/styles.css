@@ -11467,6 +11467,22 @@ input::placeholder {
   font-weight: bold;
   margin-top: 2px;
 }
+
+#cryptoList {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+#cryptoList li {
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+#cryptoList li:hover {
+  background-color: #f5f5f5;
+}
+
 /*#earningsChart {*/
 /*  width: 100% !important;*/
 /*  height: 400px !important;*/

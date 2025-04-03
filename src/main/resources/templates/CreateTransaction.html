@@ -5,7 +5,81 @@
 
 <nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
 
+<section class="container-fluid d-flex align-items-center justify-content-center vh-100">
+    <div class="masthead vh-100 justify-content-center">
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-5">
 
+                <form action="#" th:action="@{/transactions/new}" th:object="${transaction}" method="post">
+
+                    <h2 class="page-title">Create a Transaction</h2>
+
+                    <div class="form-group">
+                        <label class="text-gray-900 font-weight-bold" for="currency">
+                            Select the currency you'd like to purchase!</label>
+                        <br/>
+                        <select class="form-control form-control-user" id="currency" name="currency"
+                                th:field="*{currency}">
+                            <option value="BTC">BTC</option>
+                            <option value="ETH">ETH</option>
+                            <option value="USDT">USDT</option>
+                            <option value="XRP">XRP</option>
+                            <option value="BNB">BNB</option>
+                            <option value="SOL">SOL</option>
+                            <option value="USDC">USDC</option>
+                            <option value="DOGE">DOGE</option>
+                            <option value="ADA">ADA</option>
+                            <option value="TRX">TRX</option>
+                            <option value="STETH">STETH</option>
+                            <option value="WBTC">WBTC</option>
+                            <option value="TON">TON</option>
+                            <option value="LEO">LEO</option>
+                            <option value="LINK">LINK</option>
+                            <option value="XLM">XLM</option>
+                            <option value="USDS">USDS</option>
+                            <option value="WSTETH">WSTETH</option>
+                            <option value="AVAX">AVAX</option>
+                            <option value="SUI">SUI</option>
+                        </select>
+                    </div>
+
+                    <div class="mt-2">
+                        <label>Current Price (USD):</label>
+                        <span id="cryptoPrice" class="fw-bold">$0.00</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="text-gray-900 font-weight-bold">Amount</label>
+                        <br/>
+                        <input class="form-control form-control-user" type="text" th:field="*{amount}"
+                               placeholder="Enter Amount"/>
+                    </div>
+                    <span class="error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></span>
+                    <br/>
+                    <button class="btn btn-primary btn-user btn-block" type="submit">Create</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.getElementById("currency").addEventListener("change", async (event) => {
+        const selectedSymbol = event.target.value;
+
+        try {
+            const res = await fetch(`/api/crypto/price?symbol=${selectedSymbol.toLowerCase()}`);
+            const price = await res.text();
+            document.getElementById("cryptoPrice").textContent = `$${price}`;
+        } catch (err) {
+            console.error("Error fetching price:", err);
+            document.getElementById("cryptoPrice").textContent = "N/A";
+        }
+    });
+</script>
+
+<footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
+<div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
 
 </body>
 </html>
