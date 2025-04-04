@@ -25,6 +25,7 @@ public class TransactionMapper {
         transaction.setAmount(Double.parseDouble(transactionDtoCreate.getAmount()));
         transaction.setCurrency(transactionDtoCreate.getCurrency());
         transaction.setPrice(transactionDtoCreate.getPriceAtPurchase());
+        transaction.setShares(transactionDtoCreate.getShares());
         return transaction;
     }
 

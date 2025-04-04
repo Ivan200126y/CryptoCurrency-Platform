@@ -26,5 +26,5 @@ public interface TransactionService {
 
     Transaction findTransactionById(Long id);
 
-    Transaction createTransactionFromAmount(Double amount, User user, Transaction transaction2);
+    Transaction createTransactionFromAmount(Double amount, User user, Transaction transaction2, Double openAmount);
 }

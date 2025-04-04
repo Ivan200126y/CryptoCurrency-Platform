@@ -38,6 +38,9 @@ public class Transaction {
     @Column(name = "price")
     private Double price;
 
+    @Column(name="shares")
+    private Double shares;
+
     public Transaction() {
     }
 }

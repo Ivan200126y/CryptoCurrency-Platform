@@ -24,4 +24,6 @@ public class OpenTransaction {
 
     private Double currentPrice;
 
+    private Double shares;
+
 }

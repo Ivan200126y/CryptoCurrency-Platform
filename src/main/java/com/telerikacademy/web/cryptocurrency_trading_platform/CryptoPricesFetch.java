@@ -14,7 +14,7 @@ import java.util.Optional;
 public class CryptoPricesFetch {
 
     private final String API_URL = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1";
-    //https://docs.kraken.com/api/docs/websocket-v2/ticker
+//    https://docs.kraken.com/api/docs/websocket-v2/ticker
 //    https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1
     private List<CryptoInfo> cachedPrices = new ArrayList<>();
     private long lastFetchedTime = 0;

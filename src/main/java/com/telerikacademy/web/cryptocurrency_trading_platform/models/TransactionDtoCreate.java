@@ -14,4 +14,6 @@ public class TransactionDtoCreate {
     private String type;
 
     private Double priceAtPurchase;
+
+    private double shares;
 }

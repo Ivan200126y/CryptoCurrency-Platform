@@ -15,6 +15,7 @@ import com.telerikacademy.web.cryptocurrency_trading_platform.services.UserServi
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jdk.swing.interop.SwingInterOpUtils;
+import org.springdoc.core.service.OpenAPIService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,16 +38,17 @@ public class TransactionMvcController {
     private final AuthenticationHelper authenticationHelper;
     private final CryptoPricesFetch cryptoPricesFetch;
     private final TransactionMapper transactionMapper;
-    private double openAmount;
+    private final OpenAPIService openAPIService;
 
     public TransactionMvcController(TransactionService transactionService,
                                     UserService userService,
-                                    AuthenticationHelper authenticationHelper, CryptoPricesFetch cryptoPricesFetch, TransactionMapper transactionMapper) {
+                                    AuthenticationHelper authenticationHelper, CryptoPricesFetch cryptoPricesFetch, TransactionMapper transactionMapper, OpenAPIService openAPIService) {
         this.transactionService = transactionService;
         this.userService = userService;
         this.authenticationHelper = authenticationHelper;
         this.cryptoPricesFetch = cryptoPricesFetch;
         this.transactionMapper = transactionMapper;
+        this.openAPIService = openAPIService;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -116,26 +118,15 @@ public class TransactionMvcController {
 
         Optional<Double> priceCrypto = cryptoPricesFetch.getPriceForSymbol(transactionDtoCreate.getCurrency());
         transactionDtoCreate.setPriceAtPurchase(priceCrypto.get());
-        //Double totalUnits = Double.parseDouble(priceCrypto.get()) / amount;
+        transactionDtoCreate.setShares(Double.parseDouble(transactionDtoCreate.getAmount()) / priceCrypto.get());
 
         Transaction transaction = transactionMapper.fromTransactionDTo(transactionDtoCreate);
-
-        switch (transactionDtoCreate.getType()) {
-            case "sell":
-                user.setBalance(user.getBalance() + amount);
-                userService.update(user, user, user.getId());
-                transactionService.createIncomingTransaction(user, transaction);
-                break;
-            default:
-                if (user.getBalance() < amount) {
-                    errors.rejectValue("amount", "error.amount.over");
-                    return "CreateTransaction";
-                }
-                user.setBalance(user.getBalance() - amount);
-                userService.update(user, user, user.getId());
-                transactionService.createOutgoingTransaction(user, transaction);
-                break;
+        if (user.getBalance() < amount) {
+            errors.rejectValue("amount", "error.amount.over");
+            return "CreateTransaction";
         }
+        transactionService.createOutgoingTransaction(user, transaction);
+
         return "redirect:/transactions/all";
     }
 
@@ -171,7 +162,7 @@ public class TransactionMvcController {
             double totalOut = outgoingTr.stream().mapToDouble(Transaction::getAmount).sum();
             Double inAmount = totalIncoming.getOrDefault(currency, 0.0);
 
-            openAmount = totalOut - inAmount;
+            double openAmount = totalOut - inAmount;
 
             if (openAmount > 0) {
                 OpenTransaction open = new OpenTransaction();
@@ -207,10 +198,47 @@ public class TransactionMvcController {
         }
 
         Transaction transaction = transactionService.findTransactionById(id);
+        List<Transaction> transactions = transactionService
+                .filterTransactions(null, null, transaction.getCurrency(), user, null);
+        Double total = 0.0;
+        for (Transaction t : transactions) {
+            total = total + t.getPrice();
+        }
+        Double avgPrice = total / transactions.size();
+        transaction.setPrice(avgPrice);
+
+        Double price = cryptoPricesFetch.getPriceForSymbol(transaction.getCurrency()).get();
+
+        List<Transaction> allUserTransactions =
+                transactionService.filterTransactions(null, null, null, user, null);
+
+        double totalBought = allUserTransactions.stream()
+                .filter(t -> t.getStatus() == Status.BUY && t.getCurrency().equals(transaction.getCurrency()))
+                .mapToDouble(Transaction::getShares)
+                .sum();
+
+        double totalSold = allUserTransactions.stream()
+                .filter(t -> t.getStatus() == Status.SELL && t.getCurrency().equals(transaction.getCurrency()))
+                .mapToDouble(Transaction::getShares)
+                .sum();
+
+        double total$Bought = allUserTransactions.stream()
+                .filter(t -> t.getStatus() == Status.BUY && t.getCurrency().equals(transaction.getCurrency()))
+                .mapToDouble(Transaction::getAmount)
+                .sum();
+
+        double total$Sold = allUserTransactions.stream()
+                .filter(t -> t.getStatus() == Status.SELL && t.getCurrency().equals(transaction.getCurrency()))
+                .mapToDouble(Transaction::getAmount)
+                .sum();
+
+        double openShares = totalBought - totalSold;
+        double openAmount = total$Bought - total$Sold;
 
         Transaction openTransaction = transactionService
-                .createTransactionFromAmount(openAmount, user, transaction);
+                .createTransactionFromAmount(openShares, user, transaction, openAmount);
         openTransaction.setStatus(Status.SELL);
+        openTransaction.setPrice(price);
 
         transactionService.createIncomingTransaction(user, openTransaction);
         return "redirect:/";

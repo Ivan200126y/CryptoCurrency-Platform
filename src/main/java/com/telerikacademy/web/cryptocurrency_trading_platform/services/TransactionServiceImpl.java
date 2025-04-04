@@ -1,5 +1,6 @@
 package com.telerikacademy.web.cryptocurrency_trading_platform.services;
 
+import com.telerikacademy.web.cryptocurrency_trading_platform.CryptoPricesFetch;
 import com.telerikacademy.web.cryptocurrency_trading_platform.enums.Status;
 import com.telerikacademy.web.cryptocurrency_trading_platform.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.cryptocurrency_trading_platform.models.Transaction;
@@ -18,12 +19,14 @@ public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
+    private final CryptoPricesFetch cryptoPricesFetch;
 
     @Autowired
     public TransactionServiceImpl(TransactionRepository transactionRepository,
-                                  UserRepository userRepository) {
+                                  UserRepository userRepository, CryptoPricesFetch cryptoPricesFetch) {
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
+        this.cryptoPricesFetch = cryptoPricesFetch;
     }
 
     @Override
@@ -36,6 +39,8 @@ public class TransactionServiceImpl implements TransactionService {
             throw new IllegalArgumentException("Amount must be greater than 0");
         }
 
+        double priceCrypto = cryptoPricesFetch.getPriceForSymbol(transaction2.getCurrency()).get();
+
         Transaction transaction = new Transaction();
         transaction.setCurrency(transaction2.getCurrency());
         transaction.setAmount(transaction2.getAmount());
@@ -43,8 +48,12 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setStatus(Status.SELL);
         transaction.setCreatedAt(LocalDateTime.now());
         transaction.setPrice(transaction2.getPrice());
+        transaction.setShares(transaction2.getShares());
 
         transactionRepository.save(transaction);
+
+        user.setBalance(user.getBalance() + transaction.getAmount());
+        userRepository.save(user);
 
         return transaction;
     }
@@ -66,11 +75,12 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setStatus(Status.BUY);
         transaction.setCreatedAt(LocalDateTime.now());
         transaction.setPrice(transaction2.getPrice());
+        transaction.setShares(transaction2.getShares());
+
+        transactionRepository.save(transaction);
 
         user.setBalance(user.getBalance() - transaction.getAmount());
         userRepository.save(user);
-
-        transactionRepository.save(transaction);
 
         return transaction;
     }
@@ -105,14 +115,17 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Transaction createTransactionFromAmount(Double amount, User user, Transaction transaction2){
+    public Transaction createTransactionFromAmount(Double amount, User user, Transaction transaction2, Double openAmount) {
         Transaction transaction = new Transaction();
-        transaction.setAmount(amount);
+        transaction.setAmount(openAmount);
         transaction.setUser(user);
         transaction.setStatus(Status.SELL);
         transaction.setCreatedAt(LocalDateTime.now());
         transaction.setCurrency(transaction2.getCurrency());
         transaction.setPrice(transaction2.getPrice());
+        cryptoPricesFetch.getPriceForSymbol(transaction2.getCurrency());
+        Double totalShares = amount / transaction2.getPrice();
+        transaction.setShares(totalShares);
         return transaction;
     }
 }

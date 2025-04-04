@@ -15,12 +15,13 @@ CREATE TABLE users
 CREATE TABLE transactions
 (
     id         BIGINT AUTO_INCREMENT PRIMARY KEY,
-    user_id    BIGINT                        NOT NULL,
+    user_id    BIGINT               NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
-    amount     DECIMAL(10, 2)                NOT NULL,
+    amount     DECIMAL(10, 2)       NOT NULL,
     status     ENUM ('SELL', 'BUY') NOT NULL DEFAULT 'BUY',
-    created_at TIMESTAMP                              DEFAULT CURRENT_TIMESTAMP,
-    currency   VARCHAR(20)                   NOT NULL,
-    price      VARCHAR(255)                  NOT NULL
+    created_at TIMESTAMP                     DEFAULT CURRENT_TIMESTAMP,
+    currency   VARCHAR(20)          NOT NULL,
+    price      VARCHAR(255)         NOT NULL,
+    shares     VARCHAR(255)         NOT NULL
 );
 
