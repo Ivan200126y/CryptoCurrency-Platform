@@ -20,7 +20,7 @@ public class OpenTransaction {
 
     private String currency;
 
-    private String price;
+    private Double price;
 
     private Double currentPrice;
 

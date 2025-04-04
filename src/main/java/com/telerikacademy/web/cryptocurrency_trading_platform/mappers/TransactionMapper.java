@@ -36,8 +36,7 @@ public class TransactionMapper {
         openTransaction.setUser(transaction.getUser());
         openTransaction.setId(transaction.getId());
         openTransaction.setStatus(transaction.getStatus());
-        openTransaction.setCurrentPrice(
-                Double.parseDouble(cryptoPricesFetch.getPriceForSymbol(transaction.getCurrency()).get()));
+        openTransaction.setCurrentPrice(cryptoPricesFetch.getPriceForSymbol(transaction.getCurrency()).get());
         return openTransaction;
     }
 

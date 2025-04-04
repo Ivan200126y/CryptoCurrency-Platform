@@ -26,10 +26,10 @@ public class CryptoFetcherController {
     }
 
     @GetMapping("/price")
-    public ResponseEntity<String> getPrice(@RequestParam("symbol") String symbol) {
+    public ResponseEntity<Double> getPrice(@RequestParam("symbol") String symbol) {
         return cryptoPricesFetch.getPriceForSymbol(symbol)
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.badRequest().body("Symbol not found"));
+                .orElseGet(() -> ResponseEntity.badRequest().body(0.0));
     }
 
 }

@@ -13,5 +13,5 @@ public class TransactionDtoCreate {
 
     private String type;
 
-    private String priceAtPurchase;
+    private Double priceAtPurchase;
 }

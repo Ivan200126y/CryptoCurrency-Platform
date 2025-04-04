@@ -114,9 +114,9 @@ public class TransactionMvcController {
             return "CreateTransaction";
         }
 
-        Optional<String> priceCrypto = cryptoPricesFetch.getPriceForSymbol(transactionDtoCreate.getCurrency());
+        Optional<Double> priceCrypto = cryptoPricesFetch.getPriceForSymbol(transactionDtoCreate.getCurrency());
         transactionDtoCreate.setPriceAtPurchase(priceCrypto.get());
-        Double totalUnits = Double.parseDouble(priceCrypto.get()) / amount;
+        //Double totalUnits = Double.parseDouble(priceCrypto.get()) / amount;
 
         Transaction transaction = transactionMapper.fromTransactionDTo(transactionDtoCreate);
 
@@ -177,17 +177,17 @@ public class TransactionMvcController {
                 OpenTransaction open = new OpenTransaction();
                 Double avgPurchasePrice = outgoingTr
                         .stream()
-                        .mapToDouble(t -> Double.parseDouble(t.getPrice()))
+                        .mapToDouble(t -> t.getPrice())
                         .average()
                         .orElse(0.0);
 
-                Double currentPrice = Double.parseDouble(cryptoPricesFetch.getPriceForSymbol(currency).get());
+                Double currentPrice = cryptoPricesFetch.getPriceForSymbol(currency).get();
                 open.setCurrency(currency);
                 open.setAmount(openAmount);
                 open.setStatus(Status.BUY);
                 open.setUser(user);
                 open.setCreatedAt(LocalDateTime.now());
-                open.setPrice(avgPurchasePrice.toString());
+                open.setPrice(avgPurchasePrice);
                 open.setCurrentPrice(currentPrice);
                 open.setId(entry.getValue().get(0).getId());
                 openTransactions.add(open);

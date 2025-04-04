@@ -52,10 +52,10 @@ public class CryptoPricesFetch {
     }
 
 
-    public Optional<String> getPriceForSymbol(String symbol) {
+    public Optional<Double> getPriceForSymbol(String symbol) {
         return fetchCryptoPrices().stream()
                 .filter(c -> c.getSymbol().equalsIgnoreCase(symbol))
-                .map(c -> c.getPrice().toString())
+                .map(c -> c.getPrice())
                 .findFirst();
     }
 

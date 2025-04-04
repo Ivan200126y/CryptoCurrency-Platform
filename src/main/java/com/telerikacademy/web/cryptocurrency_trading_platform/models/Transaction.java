@@ -36,7 +36,7 @@ public class Transaction {
     private String currency;
 
     @Column(name = "price")
-    private String price;
+    private Double price;
 
     public Transaction() {
     }

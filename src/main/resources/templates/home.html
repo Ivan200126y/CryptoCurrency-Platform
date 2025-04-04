@@ -180,6 +180,7 @@
                                         <th>Amount</th>
                                         <th>Date</th>
                                         <th>Price at Purchase</th>
+                                        <th>Total Number Purchased</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -189,6 +190,7 @@
                                         <td th:text="${transaction.amount}"></td>
                                         <td th:text="${#temporals.format(transaction.createdAt, 'yyyy-MM-dd')}"></td>
                                         <td th:text="${transaction.price}"></td>
+                                        <td th:text="${transaction.amount/transaction.price}"></td>
                                     </tr>
                                     </tbody>
                                 </table>
