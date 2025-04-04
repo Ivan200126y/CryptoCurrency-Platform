@@ -32,8 +32,8 @@
             <label class="form-label fw-bold text-gray-900" for="isIncoming">Is Incoming</label>
             <select id="isIncoming" name="isIncoming" class="form-select">
                 <option value="" th:selected="${staus == null}">Any</option>
-                <option value="true" th:selected="${status == 'INCOMING'}">Yes</option>
-                <option value="false" th:selected="${status == OUTGOING}">No</option>
+                <option value="true" th:selected="${status == 'SELL'}">Yes</option>
+                <option value="false" th:selected="${status == BUY}">No</option>
             </select>
         </div>
 
@@ -75,15 +75,15 @@
 
             <span class="fw-bold px-2 py-1 rounded font-monospace"
                   th:text="${#numbers.formatDecimal(transaction.amount, 1, 2)}"
-                  th:classappend="${transaction.status.name() == 'INCOMING'} ? 'text-success' :
-                               (${transaction.status.name() == 'OUTGOING'} ? 'text-warning' :
+                  th:classappend="${transaction.status.name() == 'SELL'} ? 'text-success' :
+                               (${transaction.status.name() == 'BUY'} ? 'text-warning' :
                                'text-danger')">
             </span>
 
             <span class="badge"
                   th:text="${transaction.status}"
-                  th:classappend="${transaction.status.name() == 'INCOMING'} ? 'text-success' :
-                               (${transaction.status.name() == 'OUTGOING'} ? 'text-warning' :
+                  th:classappend="${transaction.status.name() == 'SELL'} ? 'text-success' :
+                               (${transaction.status.name() == 'BUY'} ? 'text-warning' :
                                'text-danger')">
             </span>
         </div>

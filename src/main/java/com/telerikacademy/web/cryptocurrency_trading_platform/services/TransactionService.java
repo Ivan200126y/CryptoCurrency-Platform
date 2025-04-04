@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface TransactionService {
 
-    Transaction createIncomingTransaction(User user, Double amount);
+    Transaction createIncomingTransaction(User user, Transaction transaction2);
 
-    Transaction createOutgoingTransaction(User user, Double amount);
+    Transaction createOutgoingTransaction(User user, Transaction transaction2);
 
     List<Transaction> filterTransactions(LocalDateTime startDate,
                                          LocalDateTime endDate,
@@ -23,4 +23,8 @@ public interface TransactionService {
     List<TransactionDTO> sortTransactions(List<TransactionDTO> transactions,
                                           String sortBy,
                                           boolean ascending);
+
+    Transaction findTransactionById(Long id);
+
+    Transaction createTransactionFromAmount(Double amount, User user, Transaction transaction2);
 }

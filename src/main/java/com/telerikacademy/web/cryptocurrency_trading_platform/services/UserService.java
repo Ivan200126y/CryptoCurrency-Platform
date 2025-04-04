@@ -18,7 +18,7 @@ public interface UserService {
 
     void create(User user);
 
-    void update(User user, User doesUpdate);
+    void update(User user, User doesUpdate, Long id);
 
     void delete(int id, User doesDelete);
 

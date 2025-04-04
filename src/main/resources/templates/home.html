@@ -26,54 +26,6 @@
                 <!-- Content Row -->
                 <div class="row">
 
-                    <!-- Earnings (Monthly) Card Example -->
-                    <!--                    <div class="col-xl-3 col-md-6 mb-4">-->
-                    <!--                        <div class="card border-left-primary shadow h-100 py-2">-->
-                    <!--                            <div class="card-body">-->
-                    <!--                                <div class="row no-gutters align-items-center">-->
-                    <!--                                    <div class="col mr-2">-->
-                    <!--                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">-->
-                    <!--                                            Transactions (Incoming)-->
-                    <!--                                        </div>-->
-                    <!--&lt;!&ndash;                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"&ndash;&gt;-->
-                    <!--&lt;!&ndash;                                             th:text="${incomingTransactions}">&ndash;&gt;-->
-                    <!--&lt;!&ndash;                                        </div>&ndash;&gt;-->
-                    <!--                                    </div>-->
-                    <!--                                    <div class="col-auto">-->
-                    <!--                                        <a th:href="@{/transactions/all(isIncoming=true)}"-->
-                    <!--                                           style="text-decoration: none;">-->
-                    <!--                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>-->
-                    <!--                                        </a>-->
-                    <!--                                    </div>-->
-                    <!--                                </div>-->
-                    <!--                            </div>-->
-                    <!--                        </div>-->
-                    <!--                    </div>-->
-
-                    <!--                    &lt;!&ndash; Earnings (Monthly) Card Example &ndash;&gt;-->
-                    <!--                    <div class="col-xl-3 col-md-6 mb-4">-->
-                    <!--                        <div class="card border-left-danger shadow h-100 py-2">-->
-                    <!--                            <div class="card-body">-->
-                    <!--                                <div class="row no-gutters align-items-center">-->
-                    <!--                                    <div class="col mr-2">-->
-                    <!--                                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">-->
-                    <!--                                            Total Losses-->
-                    <!--                                        </div>-->
-                    <!--                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"-->
-                    <!--                                             th:text="${outgoingTransactions}">-->
-                    <!--                                        </div>-->
-                    <!--                                    </div>-->
-                    <!--                                    <div class="col-auto">-->
-                    <!--                                        <a th:href="@{/transactions/all(isIncoming=false)}"-->
-                    <!--                                           style="text-decoration: none;">-->
-                    <!--                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>-->
-                    <!--                                        </a>-->
-                    <!--                                    </div>-->
-                    <!--                                </div>-->
-                    <!--                            </div>-->
-                    <!--                        </div>-->
-                    <!--                    </div>-->
-
                     <div class="col-xl-3 col-md-6 mb-4">
                         <div class="card border-left-info shadow h-100 py-2">
                             <div class="card-body">
@@ -132,7 +84,7 @@
                             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 
 
-                                <h6 class="m-0 font-weight-bold text-primary">Top 20 Crypto Prices</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">Current Investments</h6>
                                 <div class="dropdown no-arrow">
                                     <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -147,17 +99,11 @@
                                         <a class="dropdown-item" href="#">Something else here</a>
                                     </div>
                                 </div>
-                                <!--                                <select id="transactionPeriod" class="form-control-sm">-->
-                                <!--                                    <option value="7">Last 7 days</option>-->
-                                <!--                                    <option value="30">Last 30 days</option>-->
-                                <!--                                    <option value="365">Last Year</option>-->
-                                <!--                                </select>-->
                             </div>
                             <!-- Card Body -->
                             <div class="card-body">
                                 <div class="d-flex justify-content-center align-items-center" style="height: 300px;">
                                     <h2 class="text-muted">Coming Soon!</h2>
-                                    <!--                                    <canvas id="earningsChart"></canvas>-->
                                 </div>
                             </div>
                         </div>
@@ -220,7 +166,7 @@
                                 </a>
 
                                 <div>
-                                    <a class="btn btn-primary" th:href="@{/transactions/new}">
+                                    <a class="btn btn-primary" th:href="@{/transactions/new?type='buy'}">
                                         New Transaction
                                     </a>
                                 </div>
@@ -230,15 +176,19 @@
                                     <thead>
                                     <tr>
                                         <th>Type</th>
+                                        <th>Currency</th>
                                         <th>Amount</th>
                                         <th>Date</th>
+                                        <th>Price at Purchase</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr th:each="transaction : ${transactions}">
                                         <td th:text="${transaction.status}"></td>
+                                        <td th:text="${transaction.currency}"></td>
                                         <td th:text="${transaction.amount}"></td>
                                         <td th:text="${#temporals.format(transaction.createdAt, 'yyyy-MM-dd')}"></td>
+                                        <td th:text="${transaction.price}"></td>
                                     </tr>
                                     </tbody>
                                 </table>

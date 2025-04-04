@@ -18,8 +18,9 @@ CREATE TABLE transactions
     user_id    BIGINT                        NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
     amount     DECIMAL(10, 2)                NOT NULL,
-    status     ENUM ('INCOMING', 'OUTGOING') NOT NULL DEFAULT 'INCOMING',
+    status     ENUM ('SELL', 'BUY') NOT NULL DEFAULT 'BUY',
     created_at TIMESTAMP                              DEFAULT CURRENT_TIMESTAMP,
-    currency   VARCHAR(20)                   NOT NULL
+    currency   VARCHAR(20)                   NOT NULL,
+    price      VARCHAR(255)                  NOT NULL
 );
 

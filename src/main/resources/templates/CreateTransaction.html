@@ -13,6 +13,7 @@
                 <form action="#" th:action="@{/transactions/new}" th:object="${transaction}" method="post">
 
                     <h2 class="page-title">Create a Transaction</h2>
+                    <input type="hidden" th:field="*{type}" value="buy" />
 
                     <div class="form-group">
                         <label class="text-gray-900 font-weight-bold" for="currency">
@@ -52,10 +53,14 @@
                         <label class="text-gray-900 font-weight-bold">Amount</label>
                         <br/>
                         <input class="form-control form-control-user" type="text" th:field="*{amount}"
-                               placeholder="Enter Amount"/>
+                               placeholder="Enter Amount of Units"/>
                     </div>
+
                     <span class="error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></span>
                     <br/>
+<!--                    <span class="text-gray-900 font-weight-bold"-->
+<!--                          th:text="'Based on your balance, you can purchase: ' + ${user.balance}"></span>-->
+<!--                    <br/>-->
                     <button class="btn btn-primary btn-user btn-block" type="submit">Create</button>
                 </form>
             </div>

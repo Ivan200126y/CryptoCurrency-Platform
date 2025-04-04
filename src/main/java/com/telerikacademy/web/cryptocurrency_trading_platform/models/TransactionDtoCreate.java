@@ -12,4 +12,6 @@ public class TransactionDtoCreate {
     private String currency;
 
     private String type;
+
+    private String priceAtPurchase;
 }

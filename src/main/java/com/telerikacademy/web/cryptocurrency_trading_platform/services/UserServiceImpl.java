@@ -86,9 +86,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(User user, User doesUpdate) {
+    public void update(User user, User doesUpdate, Long id) {
         checkIfCreatorOrAdminForUser(user, doesUpdate);
         boolean exists = userRepository.findByEmail(user.getEmail()) != null;
+        if (user.getId() == id) {
+            exists = false;
+        }
         if (exists) {
             throw new DuplicateEntityException("User", "email", user.getEmail());
         }

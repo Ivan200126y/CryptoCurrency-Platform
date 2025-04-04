@@ -35,6 +35,9 @@ public class Transaction {
     @Column(name = "currency")
     private String currency;
 
+    @Column(name = "price")
+    private String price;
+
     public Transaction() {
     }
 }

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/PageLayout.html :: head('Transactions')}"></head>
+<body class="d-flex flex-column min-vh-100">
+
+<nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
+<br/><br/>
+<header class="masthead">
+    <div class="container">
+        <div class="access-denied-title">Open Positions</div>
+    </div>
+</header>
+<h2 class="text-center mt-5" th:if="${transactions.isEmpty()}">No Results Found</h2>
+<div class="container mt-4">
+    <div class="list-group mb-5">
+
+        <div class="list-group-item d-flex justify-content-between align-items-center border-bottom py-3 bg-light fw-bold">
+            <div class="w-20">Currency</div>
+            <div class="w-20">Amount</div>
+            <div class="w-20">Status</div>
+            <div class="w-20">Purchase Price</div>
+            <div class="w-20">Current Price</div>
+        </div>
+
+        <div th:each="transaction : ${transactions}"
+             class="list-group-item d-flex justify-content-between align-items-center border-bottom py-3">
+
+            <div class="d-flex flex-column">
+                <span th:text="${transaction.currency}"></span>
+            </div>
+
+            <span class="fw-bold px-2 py-1 rounded font-monospace"
+                  th:text="${#numbers.formatDecimal(transaction.amount, 1, 2)}"
+                  th:classappend="${transaction.status.name() == 'SELL'} ? 'text-success' :
+                               (${transaction.status.name() == 'BUY'} ? 'text-warning' :
+                               'text-danger')">
+            </span>
+
+            <span class="badge"
+                  th:text="${transaction.status}"
+                  th:classappend="${transaction.status.name() == 'SELL'} ? 'text-success' :
+                               (${transaction.status.name() == 'BUY'} ? 'text-warning' :
+                               'text-danger')">
+            </span>
+
+            <span class="badge"
+                  th:text="${transaction.price}"
+                  th:classappend="${transaction.status.name() == 'SELL'} ? 'text-success' :
+                               (${transaction.status.name() == 'BUY'} ? 'text-warning' :
+                               'text-danger')">
+            </span>
+
+            <span class="badge"
+                  th:text="${transaction.currentPrice}"
+                  th:classappend="${transaction.status.name() == 'SELL'} ? 'text-success' :
+                               (${transaction.status.name() == 'BUY'} ? 'text-warning' :
+                               'text-danger')">
+            </span>
+
+            <div>
+                <a class="btn btn-danger" th:href="@{/transactions/close/{id}
+                (id=${transaction.id})}">
+                    Close Position
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
+<div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
+
+</body>
+</html>

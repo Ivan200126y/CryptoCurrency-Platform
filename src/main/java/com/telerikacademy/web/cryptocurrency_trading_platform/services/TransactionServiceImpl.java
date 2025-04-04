@@ -1,6 +1,7 @@
 package com.telerikacademy.web.cryptocurrency_trading_platform.services;
 
 import com.telerikacademy.web.cryptocurrency_trading_platform.enums.Status;
+import com.telerikacademy.web.cryptocurrency_trading_platform.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.cryptocurrency_trading_platform.models.Transaction;
 import com.telerikacademy.web.cryptocurrency_trading_platform.models.TransactionDTO;
 import com.telerikacademy.web.cryptocurrency_trading_platform.models.User;
@@ -26,20 +27,22 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Transaction createIncomingTransaction(User user, Double amount) {
+    public Transaction createIncomingTransaction(User user, Transaction transaction2) {
         if (user == null) {
             throw new IllegalArgumentException("User can't be null");
         }
 
-        if (amount <= 0) {
+        if (transaction2.getAmount() <= 0) {
             throw new IllegalArgumentException("Amount must be greater than 0");
         }
 
         Transaction transaction = new Transaction();
-        transaction.setAmount(amount);
+        transaction.setCurrency(transaction2.getCurrency());
+        transaction.setAmount(transaction2.getAmount());
         transaction.setUser(user);
-        transaction.setStatus(Status.INCOMING);
+        transaction.setStatus(Status.SELL);
         transaction.setCreatedAt(LocalDateTime.now());
+        transaction.setPrice(transaction2.getPrice());
 
         transactionRepository.save(transaction);
 
@@ -47,22 +50,24 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Transaction createOutgoingTransaction(User user, Double amount) {
+    public Transaction createOutgoingTransaction(User user, Transaction transaction2) {
         if (user == null) {
             throw new IllegalArgumentException("User can't be null");
         }
 
-        if (amount <= 0) {
+        if (transaction2.getAmount() <= 0) {
             throw new IllegalArgumentException("Amount must be greater than 0");
         }
 
         Transaction transaction = new Transaction();
-        transaction.setAmount(amount);
+        transaction.setAmount(transaction2.getAmount());
+        transaction.setCurrency(transaction2.getCurrency());
         transaction.setUser(user);
-        transaction.setStatus(Status.OUTGOING);
+        transaction.setStatus(Status.BUY);
         transaction.setCreatedAt(LocalDateTime.now());
+        transaction.setPrice(transaction2.getPrice());
 
-        user.setBalance(user.getBalance() - amount);
+        user.setBalance(user.getBalance() - transaction.getAmount());
         userRepository.save(user);
 
         transactionRepository.save(transaction);
@@ -88,5 +93,26 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public List<TransactionDTO> sortTransactions(List<TransactionDTO> transactions, String sortBy, boolean ascending) {
         return List.of();
+    }
+
+    @Override
+    public Transaction findTransactionById(Long id) {
+        Transaction transaction = transactionRepository.findTransactionById(id);
+        if (transaction == null) {
+            throw new EntityNotFoundException("Transaction", id);
+        }
+        return transaction;
+    }
+
+    @Override
+    public Transaction createTransactionFromAmount(Double amount, User user, Transaction transaction2){
+        Transaction transaction = new Transaction();
+        transaction.setAmount(amount);
+        transaction.setUser(user);
+        transaction.setStatus(Status.SELL);
+        transaction.setCreatedAt(LocalDateTime.now());
+        transaction.setCurrency(transaction2.getCurrency());
+        transaction.setPrice(transaction2.getPrice());
+        return transaction;
     }
 }
