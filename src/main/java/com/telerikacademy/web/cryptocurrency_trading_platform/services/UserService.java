@@ -4,7 +4,7 @@ import com.telerikacademy.web.cryptocurrency_trading_platform.models.User;
 
 public interface UserService {
 
-    User getById(int id);
+    User getById(Long id);
 
     User getByEmail(String email);
 
@@ -12,14 +12,10 @@ public interface UserService {
 
     User getByPhoneNumber(String phoneNumber);
 
-    void alterAdminPermissions(long id, User user, boolean isAdmin);
-
-    void alterBlockPermissions(long id, User user, boolean isBlocked);
-
     void create(User user);
 
     void update(User user, User doesUpdate, Long id);
 
-    void delete(int id, User doesDelete);
+    void delete(Long id, User doesDelete);
 
 }

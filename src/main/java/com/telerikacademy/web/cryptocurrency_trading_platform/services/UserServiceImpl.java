@@ -21,8 +21,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getById(int id) {
-        User user = userRepository.findById(id);
+    public User getById(Long id) {
+        User user = userRepository.findUserById(id);
         if (user == null) {
             throw new EntityNotFoundException("User", id);
         }
@@ -57,26 +57,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void alterAdminPermissions(long id, User user, boolean isAdmin) {
-        if (user.isAdmin()) {
-            user.setAdmin(false);
-        } else {
-            user.setAdmin(true);
-        }
-        userRepository.save(user);
-    }
-
-    @Override
-    public void alterBlockPermissions(long id, User user, boolean isBlocked) {
-        if (user.isBlocked()) {
-            user.setBlocked(false);
-        } else {
-            user.setBlocked(true);
-        }
-        userRepository.save(user);
-    }
-
-    @Override
     public void create(User user) {
         boolean exists = userRepository.findByEmail(user.getEmail()) != null;
         if (exists) {
@@ -99,8 +79,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(int id, User doesDelete) {
-        User user = userRepository.findById(id);
+    public void delete(Long id, User doesDelete) {
+        User user = userRepository.findUserById(id);
         checkIfCreatorOrAdminForUser(user, doesDelete);
         userRepository.delete(user);
     }
