@@ -43,13 +43,14 @@ public class TransactionServiceImpl implements TransactionService {
 
         Transaction transaction = new Transaction();
         transaction.setCurrency(transaction2.getCurrency());
-        transaction.setAmount(transaction2.getAmount());
+        transaction.setAmount(transaction2.getShares() * priceCrypto);
         transaction.setUser(user);
         transaction.setStatus(Status.SELL);
         transaction.setCreatedAt(LocalDateTime.now());
         transaction.setPrice(transaction2.getPrice());
         transaction.setShares(transaction2.getShares());
-
+        System.out.println(transaction.getShares() + " " + transaction2.getShares());
+        System.out.println(transaction.getAmount() + " " + transaction2.getAmount());
         transactionRepository.save(transaction);
 
         user.setBalance(user.getBalance() + transaction.getAmount());

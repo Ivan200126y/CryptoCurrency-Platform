@@ -152,14 +152,14 @@ public class TransactionMvcController {
                 .stream()
                 .filter(t -> t.getStatus() == Status.SELL)
                 .collect(Collectors.groupingBy(Transaction::getCurrency,
-                        Collectors.summingDouble(Transaction::getAmount)));
+                        Collectors.summingDouble(Transaction::getShares)));
 
         List<OpenTransaction> openTransactions = new ArrayList<>();
         for (Map.Entry<String, List<Transaction>> entry : totalOutgoing.entrySet()) {
             String currency = entry.getKey();
             List<Transaction> outgoingTr = entry.getValue();
 
-            double totalOut = outgoingTr.stream().mapToDouble(Transaction::getAmount).sum();
+            double totalOut = outgoingTr.stream().mapToDouble(Transaction::getShares).sum();
             Double inAmount = totalIncoming.getOrDefault(currency, 0.0);
 
             double openAmount = totalOut - inAmount;
@@ -174,13 +174,14 @@ public class TransactionMvcController {
 
                 Double currentPrice = cryptoPricesFetch.getPriceForSymbol(currency).get();
                 open.setCurrency(currency);
-                open.setAmount(openAmount);
                 open.setStatus(Status.BUY);
+                open.setAmount(openAmount * currentPrice);
                 open.setUser(user);
                 open.setCreatedAt(LocalDateTime.now());
                 open.setPrice(avgPurchasePrice);
                 open.setCurrentPrice(currentPrice);
                 open.setId(entry.getValue().get(0).getId());
+                open.setShares(openAmount);
                 openTransactions.add(open);
             }
         }
@@ -239,6 +240,7 @@ public class TransactionMvcController {
                 .createTransactionFromAmount(openShares, user, transaction, openAmount);
         openTransaction.setStatus(Status.SELL);
         openTransaction.setPrice(price);
+        openTransaction.setShares(openShares);
 
         transactionService.createIncomingTransaction(user, openTransaction);
         return "redirect:/";

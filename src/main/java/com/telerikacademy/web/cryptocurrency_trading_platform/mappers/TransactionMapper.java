@@ -10,6 +10,8 @@ import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class TransactionMapper {
@@ -37,6 +39,7 @@ public class TransactionMapper {
         openTransaction.setUser(transaction.getUser());
         openTransaction.setId(transaction.getId());
         openTransaction.setStatus(transaction.getStatus());
+        openTransaction.setShares(transaction.getShares());
         openTransaction.setCurrentPrice(cryptoPricesFetch.getPriceForSymbol(transaction.getCurrency()).get());
         return openTransaction;
     }
@@ -50,6 +53,14 @@ public class TransactionMapper {
         transaction.setCurrency(openTransaction.getCurrency());
         transaction.setPrice(openTransaction.getPrice());
         return transaction;
+    }
+
+    public List<OpenTransaction> fromTransactionListToOpenTransactionList(List<Transaction> transactionList) {
+        List<OpenTransaction> openTransactionList = new ArrayList<>();
+        for(Transaction transaction : transactionList) {
+            openTransactionList.add(fromTransaction(transaction));
+        }
+        return openTransactionList;
     }
 
 }

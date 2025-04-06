@@ -27,9 +27,9 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <a class="nav-link text-primary font-weight-bold" th:href="@{/about}">About</a>
-        </li>
+<!--        <li class="nav-item">-->
+<!--          <a class="nav-link text-primary font-weight-bold" th:href="@{/about}">About</a>-->
+<!--        </li>-->
         <li class="nav-item" th:if="${isAuthenticated}">
           <a class="nav-link text-dark font-weight-bold" th:href="@{/auth/account}">Account</a>
         </li>
@@ -42,9 +42,9 @@
           <a class="nav-link text-dark font-weight-bold" th:href="@{/transactions/current}">Open Transactions</a>
         </li>
 
-        <li class="nav-item" th:if="${isAuthenticated} and ${session.isAdmin}">
-          <a class="nav-link text-dark font-weight-bold" th:href="@{/users/admin}">Admin Portal</a>
-        </li>
+<!--        <li class="nav-item" th:if="${isAuthenticated} and ${session.isAdmin}">-->
+<!--          <a class="nav-link text-dark font-weight-bold" th:href="@{/users/admin}">Admin Portal</a>-->
+<!--        </li>-->
         <li class="nav-item" th:unless="${isAuthenticated}">
           <a class="nav-link text-primary font-weight-bold" th:href="@{/auth/login}">Login</a>
         </li>
