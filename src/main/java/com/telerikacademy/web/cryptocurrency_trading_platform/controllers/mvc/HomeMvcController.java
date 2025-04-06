@@ -39,7 +39,7 @@ public class HomeMvcController {
         try {
             User user = authenticationHelper.tryGetUser(session);
             Integer countTransactions = (Integer) transactionService.filterTransactions(
-                    null, null, null, user, null)
+                            null, null, null, user, null)
                     .size();
             List<Transaction> transactions = transactionService.filterTransactions(
                     null, null, null, user, null);

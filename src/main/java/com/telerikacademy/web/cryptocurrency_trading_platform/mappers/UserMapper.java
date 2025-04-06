@@ -1,5 +1,8 @@
 package com.telerikacademy.web.cryptocurrency_trading_platform.mappers;
 
+import com.telerikacademy.web.cryptocurrency_trading_platform.models.Transaction;
+import com.telerikacademy.web.cryptocurrency_trading_platform.models.TransactionDtoCreate;
+import com.telerikacademy.web.cryptocurrency_trading_platform.models.User;
 import com.telerikacademy.web.cryptocurrency_trading_platform.models.UserDtoOut;
 import com.telerikacademy.web.cryptocurrency_trading_platform.repositories.UserRepository;
 import lombok.AllArgsConstructor;
@@ -13,5 +16,14 @@ public class UserMapper {
 
     public UserMapper(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    public UserDtoOut fromUserToDtoOut(User user) {
+        UserDtoOut userDtoOut = new UserDtoOut();
+        userDtoOut.setId(user.getId());
+        userDtoOut.setUsername(user.getUsername());
+        userDtoOut.setEmail(user.getEmail());
+        userDtoOut.setPhone(user.getPhoneNumber());
+        return userDtoOut;
     }
 }

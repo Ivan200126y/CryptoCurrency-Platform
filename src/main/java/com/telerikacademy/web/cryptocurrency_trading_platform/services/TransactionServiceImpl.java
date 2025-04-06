@@ -128,4 +128,13 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setShares(totalShares);
         return transaction;
     }
+
+    @Override
+    public void deleteAllByUser(User user) {
+        List<Transaction> userTransactions =
+                filterTransactions(null, null, null, user, null);
+        for(Transaction transaction : userTransactions) {
+            transactionRepository.delete(transaction);
+        }
+    }
 }

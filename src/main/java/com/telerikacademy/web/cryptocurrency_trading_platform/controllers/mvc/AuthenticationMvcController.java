@@ -5,6 +5,8 @@ import com.telerikacademy.web.cryptocurrency_trading_platform.helpers.Authentica
 import com.telerikacademy.web.cryptocurrency_trading_platform.mappers.UserMapper;
 import com.telerikacademy.web.cryptocurrency_trading_platform.models.LogInDto;
 import com.telerikacademy.web.cryptocurrency_trading_platform.models.User;
+import com.telerikacademy.web.cryptocurrency_trading_platform.models.UserDtoOut;
+import com.telerikacademy.web.cryptocurrency_trading_platform.services.TransactionService;
 import com.telerikacademy.web.cryptocurrency_trading_platform.services.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
@@ -24,14 +26,16 @@ public class AuthenticationMvcController {
     private final AuthenticationHelper authenticationHelper;
     private final UserService userService;
     private final UserMapper userMapper;
+    private final TransactionService transactionService;
 
     @Autowired
     public AuthenticationMvcController(AuthenticationHelper authenticationHelper,
                                        UserService userService,
-                                       UserMapper userMapper) {
+                                       UserMapper userMapper, TransactionService transactionService) {
         this.authenticationHelper = authenticationHelper;
         this.userService = userService;
         this.userMapper = userMapper;
+        this.transactionService = transactionService;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -65,6 +69,33 @@ public class AuthenticationMvcController {
         } catch (EntityNotFoundException e) {
             errors.reject("invalid.credentials", "Invalid username or password");
             return "login";
+        }
+    }
+
+    @GetMapping("/account/reset")
+    public String reset(Model model, HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "AccessDenied";
+        }
+        user.setBalance(1000);
+        transactionService.deleteAllByUser(user);
+        model.addAttribute("currentUser", user);
+        return "home";
+    }
+
+    @GetMapping("/account")
+    public String showAccountPage(Model model,
+                                  HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetUser(session);
+            UserDtoOut userDtoOut = userMapper.fromUserToDtoOut(user);
+            model.addAttribute("user", userDtoOut);
+            return "Account";
+        } catch (AuthenticationFailureException e) {
+            return "AccessDenied";
         }
     }
 }
