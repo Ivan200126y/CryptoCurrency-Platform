@@ -4,7 +4,8 @@ import com.telerikacademy.web.cryptocurrency_trading_platform.models.Transaction
 import com.telerikacademy.web.cryptocurrency_trading_platform.models.TransactionDtoCreate;
 import com.telerikacademy.web.cryptocurrency_trading_platform.models.User;
 import com.telerikacademy.web.cryptocurrency_trading_platform.models.UserDtoOut;
-import com.telerikacademy.web.cryptocurrency_trading_platform.repositories.UserRepository;
+import com.telerikacademy.web.cryptocurrency_trading_platform.repositories.UserDaoRepository;
+//import com.telerikacademy.web.cryptocurrency_trading_platform.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,9 +13,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserMapper {
 
-    private final UserRepository userRepository;
+    private final UserDaoRepository userRepository;
 
-    public UserMapper(UserRepository userRepository) {
+    public UserMapper(UserDaoRepository userRepository) {
         this.userRepository = userRepository;
     }
 

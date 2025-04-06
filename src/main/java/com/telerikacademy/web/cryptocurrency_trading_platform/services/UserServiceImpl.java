@@ -3,7 +3,8 @@ package com.telerikacademy.web.cryptocurrency_trading_platform.services;
 import com.telerikacademy.web.cryptocurrency_trading_platform.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.cryptocurrency_trading_platform.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.cryptocurrency_trading_platform.models.User;
-import com.telerikacademy.web.cryptocurrency_trading_platform.repositories.UserRepository;
+import com.telerikacademy.web.cryptocurrency_trading_platform.repositories.UserDaoRepository;
+//import com.telerikacademy.web.cryptocurrency_trading_platform.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,10 +14,10 @@ import static com.telerikacademy.web.cryptocurrency_trading_platform.helpers.Per
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
+    private final UserDaoRepository userRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserDaoRepository userRepository) {
         this.userRepository = userRepository;
     }
 
