@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/PageLayout.html :: head('Register')}"></head>
+<body>
+
+<nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
+
+<section class="container-fluid d-flex align-items-center justify-content-center vh-100 mb-5 pb-5">
+    <div class="masthead vh-100 justify-content-center">
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-5">
+                <form action="#" th:action="@{/auth/register}" th:object="${register}" method="post">
+
+                    <h2 class="text-center text-gray-900 font-weight-bold">Create an Account</h2>
+
+                    <div class="form-group">
+                        <label class="text-gray-900 font-weight-bold">First name</label>
+                        <input type="text" class="form-control form-control-user"
+                               th:field="*{firstName}" placeholder="Enter First name">
+                    </div>
+                    <label class="error" th:if="${#fields.hasErrors()} and ${register.firstName == null or
+                    register.firstName.isEmpty()}">
+                        First name can't be empty
+                    </label>
+                    <label class="error" th:if="${#fields.hasErrors() and (register.firstName.length() < 1 or register.firstName.length() > 16)}">
+                        First name must be between 1 and 16 characters.
+                    </label>
+
+                    <div class="form-group">
+                        <label class="text-gray-900 font-weight-bold">Last name</label>
+                        <input type="text" class="form-control form-control-user"
+                               th:field="*{lastName}" placeholder="Enter Last name">
+                    </div>
+                    <label class="error"
+                           th:if="${#fields.hasErrors()} and ${register.lastName == null or register.lastName.isEmpty()}">
+                        Last name can't be empty.
+                    </label>
+                    <label class="error" th:if="${#fields.hasErrors() and (register.lastName.length() < 1 or register.lastName.length() > 16)}">
+                        Last name must be between 1 and 16 characters.
+                    </label>
+
+                    <div class="form-group">
+                        <label class="text-gray-900 font-weight-bold">Username</label>
+                        <input type="text" class="form-control form-control-user"
+                               th:field="*{username}" placeholder="Enter Username">
+                    </div>
+                    <label class="error"
+                           th:if="${#fields.hasErrors()} and ${register.username == null or register.username.isEmpty()}">
+                        Username can't be empty.
+                    </label>
+                    <label class="error" th:if="${#fields.hasErrors() and (register.username.length() < 2 or register.username.length() > 20)}">
+                        Username must be between 2 and 20 symbols.
+                    </label>
+
+                    <div class="form-group">
+                        <label class="text-gray-900 font-weight-bold">Password</label>
+                        <input type="password" class="form-control form-control-user"
+                               th:field="*{password}" placeholder="Enter Password">
+                    </div>
+                    <label class="error" th:if="${#fields.hasErrors()} and ${register.password == null or
+                    register.password.isEmpty()}">
+                        Password can't be empty.
+                    </label>
+                    <label class="error" th:if="${#fields.hasErrors()} and ${register.password.length() < 8 and
+                    register.password != null and not register.password.isEmpty()}">
+                        Password must be at least 8 symbols long.
+                    </label>
+                    <label class="error"
+                           th:if="${#fields.hasErrors('password') and register.password != null and register.password.length() >= 8}">
+                        Password must contain at least one uppercase letter, one digit, and one special character.
+                    </label>
+
+                    <div class="form-group">
+                        <label class="text-gray-900 font-weight-bold">Password Confirm</label>
+                        <input type="password" class="form-control form-control-user"
+                               th:field="*{passwordConfirm}" placeholder="Enter Password Confirm">
+                    </div>
+                    <label class="error" th:if="${#fields.hasErrors()} and ${register.passwordConfirm == null or
+                    register.passwordConfirm.isEmpty()}">
+                        Password confirm can't be empty.
+                    </label>
+                    <label class="error" th:if="${#fields.hasErrors()} and ${register.passwordConfirm.length() < 8 and
+                    register.passwordConfirm != null and not register.passwordConfirm.isEmpty()}">
+                        Password confirm must be at least 8 symbols long.
+                    </label>
+                    <label class="error"
+                           th:if="${#fields.hasErrors('passwordConfirm') and register.passwordConfirm != null and
+                           register.passwordConfirm.length() >= 8}">
+                        Password confirm must contain at least one uppercase letter, one digit, and one special character.
+                    </label>
+
+                    <div class="form-group">
+                        <label class="text-gray-900 font-weight-bold">Email</label>
+                        <input type="text" class="form-control form-control-user"
+                               th:field="*{email}" placeholder="Enter Email">
+                    </div>
+                    <label class="error" th:errors="*{email}">Email Error</label>
+
+                    <div class="form-group">
+                        <label class="text-gray-900 font-weight-bold">Phone Number</label>
+                        <input type="text" class="form-control form-control-user"
+                               th:field="*{phone}" placeholder="Enter Phone Number">
+                    </div>
+                    <label class="error"
+                           th:if="${#fields.hasErrors()} and ${register.phone == null or register.phone.isEmpty()}">
+                        Phone number can't be empty.
+                    </label>
+                    <label class="error" th:if="${#fields.hasErrors()} and ${register.phone.length() != 10}">
+                        Phone number must be exactly 10 digits!
+                    </label>
+                    <br/><br/>
+
+                    <button class="btn btn-primary btn-user btn-block" type="submit">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<br/><br/>
+
+<footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
+<div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
+
+</body>
+</html>

@@ -1,9 +1,6 @@
 package com.telerikacademy.web.cryptocurrency_trading_platform.mappers;
 
-import com.telerikacademy.web.cryptocurrency_trading_platform.models.Transaction;
-import com.telerikacademy.web.cryptocurrency_trading_platform.models.TransactionDtoCreate;
-import com.telerikacademy.web.cryptocurrency_trading_platform.models.User;
-import com.telerikacademy.web.cryptocurrency_trading_platform.models.UserDtoOut;
+import com.telerikacademy.web.cryptocurrency_trading_platform.models.*;
 import com.telerikacademy.web.cryptocurrency_trading_platform.repositories.UserDaoRepository;
 //import com.telerikacademy.web.cryptocurrency_trading_platform.repositories.UserRepository;
 import lombok.AllArgsConstructor;
@@ -26,5 +23,18 @@ public class UserMapper {
         userDtoOut.setEmail(user.getEmail());
         userDtoOut.setPhone(user.getPhoneNumber());
         return userDtoOut;
+    }
+
+    public User fromRegisterDto(RegisterDto registerDto) {
+        User user = new User();
+        user.setUsername(registerDto.getUsername());
+        user.setFirstName(registerDto.getFirstName());
+        user.setLastName(registerDto.getLastName());
+        user.setPassword(registerDto.getPassword());
+        user.setEmail(registerDto.getEmail());
+        user.setPhoneNumber(registerDto.getPhone());
+        user.setAdmin(false);
+        user.setBlocked(false);
+        return user;
     }
 }

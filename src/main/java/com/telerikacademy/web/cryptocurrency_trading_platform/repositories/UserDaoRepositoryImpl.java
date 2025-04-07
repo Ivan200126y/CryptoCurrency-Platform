@@ -1,9 +1,11 @@
 package com.telerikacademy.web.cryptocurrency_trading_platform.repositories;
 
 import com.telerikacademy.web.cryptocurrency_trading_platform.enums.Status;
+import com.telerikacademy.web.cryptocurrency_trading_platform.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.cryptocurrency_trading_platform.models.Transaction;
 import com.telerikacademy.web.cryptocurrency_trading_platform.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -43,21 +45,37 @@ public class UserDaoRepositoryImpl implements UserDaoRepository {
 
     @Override
     public User findByUsername(String username) {
-        String sql = "select * from users where username = ?";
-        List<User> users = jdbcTemplate.query(sql, rowMapper, username);
-        return users.isEmpty() ? null : users.get(0);
+        try {
+            String sql = "select * from users where username = ?";
+            List<User> users = jdbcTemplate.query(sql, rowMapper, username);
+            return users.isEmpty() ? null : users.get(0);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override
     public User findByEmail(String email) {
         String sql = "select * from users where email = ?";
         //List<User> users = jdbcTemplate.queryForObject(sql, rowMapper, email);
-        return jdbcTemplate.queryForObject(sql, rowMapper, email);
+        try {
+            return jdbcTemplate.queryForObject(sql, rowMapper, email);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+            //throw new EntityNotFoundException("User", "email", email);
+        }
     }
 
     @Override
     public User findByPhoneNumber(String phone) {
-        return jdbcTemplate.queryForObject("select * from users where phone = ?", rowMapper, phone);
+        //return jdbcTemplate.queryForObject("select * from users where phone = ?", rowMapper, phone);
+        try {
+            return jdbcTemplate.queryForObject("select * from users where phone = ?", rowMapper, phone);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+           // throw new EntityNotFoundException("User", "phone", phone);
+        }
+
     }
 
     @Override

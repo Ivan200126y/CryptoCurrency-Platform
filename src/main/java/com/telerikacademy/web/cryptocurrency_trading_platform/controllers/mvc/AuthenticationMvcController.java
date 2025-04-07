@@ -1,9 +1,11 @@
 package com.telerikacademy.web.cryptocurrency_trading_platform.controllers.mvc;
 
 import com.telerikacademy.web.cryptocurrency_trading_platform.exceptions.AuthenticationFailureException;
+import com.telerikacademy.web.cryptocurrency_trading_platform.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.cryptocurrency_trading_platform.helpers.AuthenticationHelper;
 import com.telerikacademy.web.cryptocurrency_trading_platform.mappers.UserMapper;
 import com.telerikacademy.web.cryptocurrency_trading_platform.models.LogInDto;
+import com.telerikacademy.web.cryptocurrency_trading_platform.models.RegisterDto;
 import com.telerikacademy.web.cryptocurrency_trading_platform.models.User;
 import com.telerikacademy.web.cryptocurrency_trading_platform.models.UserDtoOut;
 import com.telerikacademy.web.cryptocurrency_trading_platform.services.TransactionService;
@@ -12,6 +14,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -42,6 +45,57 @@ public class AuthenticationMvcController {
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession session) {
         return session.getAttribute("currentUser") != null;
+    }
+
+    @GetMapping("/register")
+    public String showRegister(Model model) {
+        model.addAttribute("register", new RegisterDto());
+        return "Register";
+    }
+
+    @PostMapping("/register")
+    public String processRegister(@Valid @ModelAttribute("register") RegisterDto registerDto,
+                                  BindingResult errors) {
+
+        if (errors.hasErrors()) {
+            return "Register";
+        }
+
+        if (!registerDto.getPassword().equals(registerDto.getPasswordConfirm())) {
+            errors.rejectValue("passwordConfirm", "password.mismatch", "Passwords do not match.");
+            return "Register";
+        }
+
+        try {
+            userService.getByPhoneNumber(registerDto.getPhone());
+            errors.rejectValue("phone", "phone.duplicate", "Phone number already exists.");
+            return "Register";
+        } catch (Exception e) {
+        }
+
+        try {
+            userService.getByEmail(registerDto.getEmail());
+            errors.rejectValue("email", "email.duplicate", "Email already exists.");
+            return "Register";
+        } catch (Exception e) {
+        }
+
+        try {
+            userService.getByUsername(registerDto.getUsername());
+            errors.rejectValue("username", "username.duplicate", "Username already exists.");
+            return "Register";
+        } catch (Exception e) {
+        }
+
+        try {
+            User user = userMapper.fromRegisterDto(registerDto);
+            userService.create(user);
+            return "redirect:/auth/login";
+        } catch (DuplicateEntityException e) {
+            errors.rejectValue("username", "duplicate.username",
+                    "Username is already taken!");
+            return "Register";
+        }
     }
 
     @GetMapping("/login")

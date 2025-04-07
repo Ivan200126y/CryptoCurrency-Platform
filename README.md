@@ -84,11 +84,11 @@ Mockito
 **Transactions**
 ![Account](screenshots/transactions.png)
 
-**LogIn**
-![Account](screenshots/account.png)
-
 **Register**
-![Account](screenshots/account.png)
+![Account](screenshots/register.png)
+
+**LogIn**
+![Account](screenshots/login.png)
 
 **Database Schema**
 ![Account](screenshots/db-schema.png)
