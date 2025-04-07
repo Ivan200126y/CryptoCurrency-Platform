@@ -91,4 +91,4 @@ Mockito
 ![Account](screenshots/account.png)
 
 **Database Schema**
-![Account](screenshots/account.png)
+![Account](screenshots/db-schema.png)
