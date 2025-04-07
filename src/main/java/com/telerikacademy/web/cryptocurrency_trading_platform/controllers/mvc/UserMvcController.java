@@ -14,7 +14,4 @@ public class UserMvcController {
         this.userService = userService;
     }
 
-    //show user info - account balance and the transactions done
-             //reset user and delete all its transactions
-
 }

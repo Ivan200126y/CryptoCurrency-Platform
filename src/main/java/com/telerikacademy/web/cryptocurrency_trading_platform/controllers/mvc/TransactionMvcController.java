@@ -14,7 +14,6 @@ import com.telerikacademy.web.cryptocurrency_trading_platform.services.Transacti
 import com.telerikacademy.web.cryptocurrency_trading_platform.services.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import jdk.swing.interop.SwingInterOpUtils;
 import org.springdoc.core.service.OpenAPIService;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
