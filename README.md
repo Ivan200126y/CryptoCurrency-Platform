@@ -68,3 +68,27 @@ Mockito
 ## Functionalities
 **Main Page**
 ![Main Page](screenshots/main-page.png)
+
+**Open Transactions**
+![Account](screenshots/open-positions.png)
+
+**Create Transaction**
+![Account](screenshots/create-transaction.png)
+
+**Account**
+![Account](screenshots/account.png)
+
+**About**
+![Account](screenshots/about.png)
+
+**Transactions**
+![Account](screenshots/transactions.png)
+
+**LogIn**
+![Account](screenshots/account.png)
+
+**Register**
+![Account](screenshots/account.png)
+
+**Database Schema**
+![Account](screenshots/account.png)

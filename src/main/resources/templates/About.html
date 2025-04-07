@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/PageLayout.html :: head('About')}"></head>
+<body class="d-flex flex-column min-vh-100">
+
+<nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
+<br/><br/>
+<section class="container my-5">
+  <div class="text-center">
+    <h1 class="display-4">About CryptoMan</h1>
+    <p class="lead">Your modern, fast, and simple cryptocurrency trading platform.</p>
+  </div>
+
+  <hr/>
+
+  <div class="mt-4">
+    <h2>What is CryptoMan?</h2>
+    <p>
+      <strong>CryptoMan</strong> is a user-friendly digital cryptocurrency trading platform that allows users to effortlessly buy and sell crypto at the push of a button.
+      It integrates a live API for the latest crypto prices — updated every 60 seconds — and provides powerful tools to help users monitor, manage, and analyze their crypto portfolio.
+    </p>
+  </div>
+
+  <div class="mt-4">
+    <h2>Key Features</h2>
+    <ul>
+      <li><strong>Buy & Sell Crypto</strong> – Purchase by specifying the dollar amount, no need to calculate exact shares.</li>
+      <li><strong>Transaction History</strong> – Track all transactions, both open and closed.</li>
+      <li><strong>Open Positions</strong> – View live data on current holdings, profit/loss, and price movement.</li>
+      <li><strong>Top 20 Cryptocurrencies</strong> – Get updated prices for the most popular cryptocurrencies globally.</li>
+      <li><strong>Clean UI</strong> – Intuitive and visually organized dashboard for a smooth user experience.</li>
+    </ul>
+  </div>
+
+  <div class="mt-4">
+    <h2>Technologies Used</h2>
+    <p>CryptoMan is built using a modern Java tech stack:</p>
+    <ul>
+      <li>Java 17</li>
+      <li>Spring Boot & Spring MVC</li>
+      <li>Spring Data JPA (migrating to JdbcTemplate)</li>
+      <li>Thymeleaf for server-side rendering</li>
+      <li>MariaDB & SQL</li>
+      <li>Gradle for build automation</li>
+      <li>JUnit & Mockito for testing</li>
+    </ul>
+  </div>
+
+  <div class="mt-4">
+    <h2>About the Developer</h2>
+    <p>
+      Developed by <strong>Ivan Georgiev</strong> ([ivan200126y](https://github.com/ivan200126y)). This project was built with care and attention to detail as part of a practical training in Spring Boot web applications.
+    </p>
+  </div>
+</section>
+
+<footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
+<div th:replace="~{fragments/PageLayout.html :: scripts}"></div>
+
+</body>
+</html>

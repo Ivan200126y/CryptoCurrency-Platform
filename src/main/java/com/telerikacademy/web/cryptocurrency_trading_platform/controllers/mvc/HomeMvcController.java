@@ -56,19 +56,6 @@ public class HomeMvcController {
 
             Integer countTransactions = transactions.size();
 
-//            Map<String, List<Transaction>> totalBuy = allUserTransactions
-//                    .stream()
-//                    .filter(t -> t.getStatus() == Status.BUY)
-//                    .collect(Collectors.groupingBy(Transaction::getCurrency));
-//
-//            Map<String, List<Transaction>> totalSell = allUserTransactions
-//                    .stream()
-//                    .filter(t -> t.getStatus() == Status.SELL)
-//                    .collect(Collectors.groupingBy(Transaction::getCurrency));
-//
-//            List<OpenTransaction> openTransactions =
-//                    transactionMapper.fromTransactionListToOpenTransactionList(transactions);
-
             Map<String, List<Transaction>> totalOutgoing = transactions
                     .stream()
                     .filter(t -> t.getStatus() == Status.BUY)
@@ -120,5 +107,10 @@ public class HomeMvcController {
         } catch (AuthenticationFailureException e) {
             return "AccessDenied";
         }
+    }
+
+    @GetMapping("/about")
+    public String showAboutPage(){
+        return "About";
     }
 }
