@@ -4,6 +4,7 @@ import com.telerikacademy.web.cryptocurrency_trading_platform.enums.Status;
 import com.telerikacademy.web.cryptocurrency_trading_platform.models.Transaction;
 import com.telerikacademy.web.cryptocurrency_trading_platform.models.TransactionDTO;
 import com.telerikacademy.web.cryptocurrency_trading_platform.models.User;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,11 +19,14 @@ public interface TransactionService {
                                          LocalDateTime endDate,
                                          String currency,
                                          User user,
-                                         Status status);
+                                         Status status,
+                                         Boolean transactionType);
 
-    List<TransactionDTO> sortTransactions(List<TransactionDTO> transactions,
-                                          String sortBy,
-                                          boolean ascending);
+    Page<Transaction> sortTransactionsWithPagination(List<Transaction> transactions,
+                                                     String sortBy,
+                                                     boolean ascending,
+                                                     int page,
+                                                     int size);
 
     Transaction findTransactionById(Long id);
 

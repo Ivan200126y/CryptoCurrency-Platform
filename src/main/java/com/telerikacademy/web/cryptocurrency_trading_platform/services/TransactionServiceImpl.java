@@ -11,10 +11,16 @@ import com.telerikacademy.web.cryptocurrency_trading_platform.repositories.Trans
 import com.telerikacademy.web.cryptocurrency_trading_platform.repositories.UserDaoRepository;
 //import com.telerikacademy.web.cryptocurrency_trading_platform.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -97,19 +103,52 @@ public class TransactionServiceImpl implements TransactionService {
                                                 LocalDateTime endDate,
                                                 String currency,
                                                 User user,
-                                                Status status) {
+                                                Status status,
+                                                Boolean transactionType) {
         return transactionRepository.findAll().stream()
                 .filter(t -> startDate == null || t.getCreatedAt().isAfter(startDate))
                 .filter(t -> endDate == null || t.getCreatedAt().isBefore(endDate))
                 .filter(t -> currency == null || t.getCurrency().equalsIgnoreCase(currency))
                 .filter(t -> user == null || t.getUser().getEmail().equalsIgnoreCase(user.getEmail()))
                 .filter(t -> status == null || t.getStatus().equals(status))
+                .filter(t -> {
+                    if (transactionType == null) return true;
+                    boolean transactionIsSell = t.getStatus() == Status.SELL;
+                    return transactionType == transactionIsSell;
+                })
                 .toList();
     }
 
     @Override
-    public List<TransactionDTO> sortTransactions(List<TransactionDTO> transactions, String sortBy, boolean ascending) {
-        return List.of();
+    public Page<Transaction> sortTransactionsWithPagination(List<Transaction> transactions,
+                                                            String sortBy,
+                                                            boolean ascending,
+                                                            int page,
+                                                            int size) {
+        Comparator<Transaction> comparator = switch (sortBy.toLowerCase()) {
+            case "amount" -> Comparator.comparing(Transaction::getAmount);
+            case "date" -> Comparator.comparing(Transaction::getCreatedAt);
+            default -> throw new IllegalStateException("Unexpected value: " + sortBy);
+        };
+
+        if (!ascending) {
+            comparator = comparator.reversed();
+        }
+
+
+        List<Transaction> sortedTransactions = transactions.stream()
+                .sorted(comparator)
+                .collect(Collectors.toList());
+
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), sortedTransactions.size());
+
+        List<Transaction> paginatedTransactions = sortedTransactions.subList(start, end);
+
+        return new PageImpl<>(paginatedTransactions, pageable, sortedTransactions.size());
     }
 
     @Override
@@ -139,8 +178,8 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public void deleteAllByUser(User user) {
         List<Transaction> userTransactions =
-                filterTransactions(null, null, null, user, null);
-        for(Transaction transaction : userTransactions) {
+                filterTransactions(null, null, null, user, null, null);
+        for (Transaction transaction : userTransactions) {
             transactionRepository.delete(transaction);
         }
     }

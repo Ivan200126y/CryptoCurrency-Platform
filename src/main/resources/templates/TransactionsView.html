@@ -29,11 +29,11 @@
 
         <!-- Use d-flex to align Is Incoming, Sort By, and Order properly -->
         <div class="col-md-2 d-flex flex-column">
-            <label class="form-label fw-bold text-gray-900" for="isIncoming">Is Incoming</label>
-            <select id="isIncoming" name="isIncoming" class="form-select">
-                <option value="" th:selected="${staus == null}">Any</option>
-                <option value="true" th:selected="${status == 'SELL'}">Yes</option>
-                <option value="false" th:selected="${status == BUY}">No</option>
+            <label class="form-label fw-bold text-gray-900" for="transactionType">Transaction Type</label>
+            <select id="transactionType" name="transactionType" class="form-select">
+                <option value="" th:selected="${transactionType == null}">Any</option>
+                <option value="true" th:selected="${transactionType == true}">Sell</option>
+                <option value="false" th:selected="${transactionType == false}">Buy</option>
             </select>
         </div>
 
@@ -93,20 +93,20 @@
         </div>
     </div>
 
-<!--    <nav th:unless="${transactions.isEmpty()}">-->
-<!--        <ul class="pagination justify-content-center">-->
-<!--            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">-->
-<!--                <a class="page-link" th:href="@{/transactions/all(page=${currentPage - 1}, size=${size}, sortBy=${sortBy}, isAscending=${isAscending}, startDate=${startDate}, endDate=${endDate}, recipient=${recipient}, isIncoming=${isIncoming})}">Previous</a>-->
-<!--            </li>-->
-<!--            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"-->
-<!--                th:classappend="${i == currentPage} ? 'active'">-->
-<!--                <a class="page-link" th:href="@{/transactions/all(page=${i}, size=${size}, sortBy=${sortBy}, isAscending=${isAscending}, startDate=${startDate}, endDate=${endDate}, recipient=${recipient}, isIncoming=${isIncoming})}" th:text="${i + 1}">1</a>-->
-<!--            </li>-->
-<!--            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">-->
-<!--                <a class="page-link" th:href="@{/transactions/all(page=${currentPage + 1}, size=${size}, sortBy=${sortBy}, isAscending=${isAscending}, startDate=${startDate}, endDate=${endDate}, recipient=${recipient}, isIncoming=${isIncoming})}">Next</a>-->
-<!--            </li>-->
-<!--        </ul>-->
-<!--    </nav>-->
+    <nav th:unless="${transactions.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                <a class="page-link" th:href="@{/transactions/all(page=${currentPage - 1}, size=${size}, sortBy=${sortBy}, isAscending=${isAscending}, startDate=${startDate}, endDate=${endDate}, recipient=${recipient}, isIncoming=${isIncoming})}">Previous</a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                th:classappend="${i == currentPage} ? 'active'">
+                <a class="page-link" th:href="@{/transactions/all(page=${i}, size=${size}, sortBy=${sortBy}, isAscending=${isAscending}, startDate=${startDate}, endDate=${endDate}, recipient=${recipient}, isIncoming=${isIncoming})}" th:text="${i + 1}">1</a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                <a class="page-link" th:href="@{/transactions/all(page=${currentPage + 1}, size=${size}, sortBy=${sortBy}, isAscending=${isAscending}, startDate=${startDate}, endDate=${endDate}, recipient=${recipient}, isIncoming=${isIncoming})}">Next</a>
+            </li>
+        </ul>
+    </nav>
 </div>
 
 <footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>

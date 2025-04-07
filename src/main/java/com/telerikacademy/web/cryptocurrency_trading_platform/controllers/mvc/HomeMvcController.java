@@ -52,7 +52,7 @@ public class HomeMvcController {
             User user = authenticationHelper.tryGetUser(session);
 
             List<Transaction> transactions = transactionService.filterTransactions(
-                    null, null, null, user, null);
+                    null, null, null, user, null, null);
 
             Integer countTransactions = transactions.size();
 

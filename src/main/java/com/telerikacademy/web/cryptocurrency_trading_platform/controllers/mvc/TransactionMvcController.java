@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jdk.swing.interop.SwingInterOpUtils;
 import org.springdoc.core.service.OpenAPIService;
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -63,19 +64,40 @@ public class TransactionMvcController {
                                    @RequestParam(required = false, defaultValue = "5") int size,
                                    @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
                                    @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
-                                   @RequestParam(required = false) Double amount,
                                    @RequestParam(required = false) Status status,
-                                   @RequestParam(required = false) String currency) {
+                                   @RequestParam(required = false) String currency,
+                                   @RequestParam(required = false) boolean isAscending,
+                                   @RequestParam(required = false) String sortBy,
+                                   @RequestParam(required = false) Boolean transactionType) {
         User user = authenticationHelper.tryGetUser(session);
+        Page<Transaction> paginatedTransactions;
+        try {
+            if (sortBy == null) {
+                sortBy = "amount";
+            }
+
+            List<Transaction> transactions = transactionService.filterTransactions(startDate, endDate, currency,
+                    user, status, transactionType);
+
+            paginatedTransactions = transactionService.sortTransactionsWithPagination(transactions, sortBy, isAscending, page, size);
+        } catch (AuthenticationFailureException e) {
+            return "AccessDenied";
+        }
+
         session.setAttribute("currentUser", user.getUsername());
-        List<Transaction> transactions = transactionService.filterTransactions(null, null, null, user, null);
-        session.setAttribute("currentUser", user.getUsername());
-        model.addAttribute("transactions", transactions);
+
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
-        model.addAttribute("amount", amount);
         model.addAttribute("status", status);
         model.addAttribute("currency", currency);
+        model.addAttribute("transactions", paginatedTransactions);
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("isAscending", isAscending);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", paginatedTransactions.getTotalPages());
+        model.addAttribute("size", size);
+        model.addAttribute("transactionType", transactionType);
+
         return "TransactionsView";
     }
 
@@ -140,7 +162,7 @@ public class TransactionMvcController {
         }
 
         List<Transaction> allUserTransactions =
-                transactionService.filterTransactions(null, null, null, user, null);
+                transactionService.filterTransactions(null, null, null, user, null, null);
 
         Map<String, List<Transaction>> totalOutgoing = allUserTransactions
                 .stream()
@@ -199,7 +221,7 @@ public class TransactionMvcController {
 
         Transaction transaction = transactionService.findTransactionById(id);
         List<Transaction> transactions = transactionService
-                .filterTransactions(null, null, transaction.getCurrency(), user, null);
+                .filterTransactions(null, null, transaction.getCurrency(), user, null, null);
         Double total = 0.0;
         for (Transaction t : transactions) {
             total = total + t.getPrice();
@@ -210,7 +232,7 @@ public class TransactionMvcController {
         Double price = cryptoPricesFetch.getPriceForSymbol(transaction.getCurrency()).get();
 
         List<Transaction> allUserTransactions =
-                transactionService.filterTransactions(null, null, null, user, null);
+                transactionService.filterTransactions(null, null, null, user, null, null);
 
         double totalBought = allUserTransactions.stream()
                 .filter(t -> t.getStatus() == Status.BUY && t.getCurrency().equals(transaction.getCurrency()))
