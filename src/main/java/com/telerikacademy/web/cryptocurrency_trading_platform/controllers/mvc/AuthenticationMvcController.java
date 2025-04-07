@@ -10,6 +10,7 @@ import com.telerikacademy.web.cryptocurrency_trading_platform.services.Transacti
 import com.telerikacademy.web.cryptocurrency_trading_platform.services.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,9 +51,9 @@ public class AuthenticationMvcController {
     }
 
     @PostMapping("/login")
-    public String processLogin(@ModelAttribute("login") LogInDto login,
-                               HttpSession session,
-                               BindingResult errors) {
+    public String processLogin(@Valid @ModelAttribute("login") LogInDto login,
+                               BindingResult errors,
+                               HttpSession session) {
         if (errors.hasErrors()) {
             return "login";
         }

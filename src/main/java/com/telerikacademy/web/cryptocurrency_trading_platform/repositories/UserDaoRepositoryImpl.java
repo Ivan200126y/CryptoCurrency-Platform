@@ -44,12 +44,15 @@ public class UserDaoRepositoryImpl implements UserDaoRepository {
     @Override
     public User findByUsername(String username) {
         String sql = "select * from users where username = ?";
-        return jdbcTemplate.queryForObject(sql, rowMapper, username);
+        List<User> users = jdbcTemplate.query(sql, rowMapper, username);
+        return users.isEmpty() ? null : users.get(0);
     }
 
     @Override
     public User findByEmail(String email) {
-        return jdbcTemplate.queryForObject("select * from users where email = ?", rowMapper, email);
+        String sql = "select * from users where email = ?";
+        //List<User> users = jdbcTemplate.queryForObject(sql, rowMapper, email);
+        return jdbcTemplate.queryForObject(sql, rowMapper, email);
     }
 
     @Override

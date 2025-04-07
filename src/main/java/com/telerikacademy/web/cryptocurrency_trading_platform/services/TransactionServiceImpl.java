@@ -37,8 +37,8 @@ public class TransactionServiceImpl implements TransactionService {
             throw new IllegalArgumentException("User can't be null");
         }
 
-        if (transaction2.getAmount() <= 0) {
-            throw new IllegalArgumentException("Amount must be greater than 0");
+        if (transaction2.getAmount() > user.getBalance()) {
+            throw new IllegalArgumentException("Insufficient funds");
         }
 
         double priceCrypto = cryptoPricesFetch.getPriceForSymbol(transaction2.getCurrency()).get();
@@ -69,6 +69,10 @@ public class TransactionServiceImpl implements TransactionService {
 
         if (transaction2.getAmount() <= 0) {
             throw new IllegalArgumentException("Amount must be greater than 0");
+        }
+
+        if (transaction2.getAmount() > user.getBalance()) {
+            throw new IllegalArgumentException("Insufficient funds");
         }
 
         Transaction transaction = new Transaction();

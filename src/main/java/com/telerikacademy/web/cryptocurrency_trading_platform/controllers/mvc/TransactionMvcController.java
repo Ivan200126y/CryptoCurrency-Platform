@@ -94,12 +94,10 @@ public class TransactionMvcController {
     }
 
     @PostMapping("/new")
-    public String createTransaction(@Valid @ModelAttribute TransactionDtoCreate transactionDtoCreate,
-                                    @RequestParam(required = false) String type,
+    public String createTransaction(@Valid @ModelAttribute("transaction") TransactionDtoCreate transactionDtoCreate,
                                     BindingResult errors,
+                                    @RequestParam(required = false) String type,
                                     HttpSession session) {
-        Double amount = Double.parseDouble(transactionDtoCreate.getAmount());
-
         if (errors.hasErrors()) {
             return "CreateTransaction";
         }
@@ -119,6 +117,7 @@ public class TransactionMvcController {
         Optional<Double> priceCrypto = cryptoPricesFetch.getPriceForSymbol(transactionDtoCreate.getCurrency());
         transactionDtoCreate.setPriceAtPurchase(priceCrypto.get());
         transactionDtoCreate.setShares(Double.parseDouble(transactionDtoCreate.getAmount()) / priceCrypto.get());
+        Double amount = Double.parseDouble(transactionDtoCreate.getAmount());
 
         Transaction transaction = transactionMapper.fromTransactionDTo(transactionDtoCreate);
         if (user.getBalance() < amount) {
