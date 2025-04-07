@@ -8,7 +8,8 @@ feautures such as crypto buying and selling, transaction history, reseting your 
 **Ivan Georgiev** – [ivan200126y](https://github.com/ivan200126y)
 
 ## Features
-**Buy & Sell crypto** - Buy based on the $ amount you want to purchase, not the exact number of shares. 
+**Buy crypto** - Buy based on the $ amount you want to purchase, not the exact number of shares.
+**Partial or Full Sell of Positions** - You're able to close your full holdings in a given cryptocurrency or only partially.
 **Transaction History** - View all of your transactions, open and closed
 **Open Transactions** - View your current open positions, along with the purchase price, current price and the profit or the 
 loss you have on the position.
@@ -16,6 +17,7 @@ loss you have on the position.
 every minute.
 **Sort & Filtering** - View all transactions and filter them based on start & end-date, and transaction type. Also 
 sort by amount & date (in ascending and descending order)
+
 
 ## Installation
 1. **Clone the repository** on your computer and install the dependencies in build.gradle
