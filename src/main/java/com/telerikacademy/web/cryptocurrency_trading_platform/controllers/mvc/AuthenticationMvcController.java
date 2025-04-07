@@ -136,6 +136,7 @@ public class AuthenticationMvcController {
             return "AccessDenied";
         }
         user.setBalance(1000);
+        userService.update(user, user, user.getId());
         transactionService.deleteAllByUser(user);
         model.addAttribute("currentUser", user);
         return "home";
