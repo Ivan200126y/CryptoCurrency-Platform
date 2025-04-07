@@ -39,15 +39,6 @@ spring.datasource.url=jdbc:mariadb://localhost:3306/virtual_wallet
 spring.datasource.username=root
 spring.datasource.password={yourpassword}
 
-# Email verification
-spring.mail.username={sender_email_username}
-spring.mail.password={sender_email_password}
-
-# API Keys
-cloudinary.cloud-name={your_cloud_name}
-cloudinary.api-key={your_api_key}
-cloudinary.api-secret={your_api_secret}
-
 ## Login Details
 **The provided credentials are for testing purposes only!**
 
