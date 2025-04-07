@@ -14,6 +14,8 @@ feautures such as crypto buying and selling, transaction history, reseting your 
 loss you have on the position.
 **Crypto Prices** - View the real-time prices on the top-20 crypto currencies around the world, with the prices being updated
 every minute.
+**Sort & Filtering** - View all transactions and filter them based on start & end-date, and transaction type. Also 
+sort by amount & date (in ascending and descending order)
 
 ## Installation
 1. **Clone the repository** on your computer and install the dependencies in build.gradle

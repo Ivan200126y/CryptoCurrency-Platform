@@ -20,7 +20,7 @@
             <div class="w-20">Purchase Price</div>
             <div class="w-20">Current Price</div>
             <div class="w-20">
-                <a href="/help" th:href="@{/help}" class="btn btn-outline-info btn-sm">Need Help?</a>
+                <div class="btn btn-outline-info btn-sm">Need Help? Contact Us!</div>
             </div>
         </div>
 
@@ -62,8 +62,10 @@
             <div>
                 <a class="btn btn-danger" th:href="@{/transactions/close/{id}
                 (id=${transaction.id})}">
-                    Close Position
+                    Close Full
                 </a>
+
+                <a th:href="@{/transactions/sell(currency=${transaction.currency})}" class="btn btn-danger">Close Partial</a>
             </div>
 
         </div>

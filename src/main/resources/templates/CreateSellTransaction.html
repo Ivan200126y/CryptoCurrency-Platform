@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" lang="en">
+<head th:replace="~{fragments/PageLayout.html :: head('Create Transaction')}"></head>
+<body>
+
+<nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
+
+<section class="container-fluid d-flex align-items-center justify-content-center vh-100">
+  <div class="masthead vh-100 justify-content-center">
+    <div class="card o-hidden border-0 shadow-lg my-5">
+      <div class="card-body p-5">
+
+        <form action="#" th:action="@{/transactions/sell}" th:object="${transaction}" method="post">
+
+          <h2 class="page-title">Create a Transaction</h2>
+
+          <input type="hidden" th:field="*{type}" value="sell" />
+          <input type="hidden" th:field="*{currency}"/>
+
+          <div class="form-group">
+            <h3 class="text-gray-900 font-weight-bold">
+              You are selling:</h3>
+            <br/>
+            <h2 class="text-gray-900 font-weight-bold" th:text="${transaction.getCurrency()}"></h2>
+          </div>
+
+          <div class="form-group">
+            <label class="text-gray-900 font-weight-bold">Amount of shares</label>
+            <br/>
+            <input class="form-control form-control-user" type="text" th:field="*{shares}"
+                   placeholder="Enter Amount"/>
+          </div>
+
+          <span class="error" th:if="${#fields.hasErrors('shares')}" th:errors="*{shares}"></span>
+          <br/>
+          <button class="btn btn-danger btn-user btn-block" type="submit">Create</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
+<div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
+
+</body>
+</html>

@@ -266,6 +266,77 @@ public class TransactionMvcController {
         transactionService.createIncomingTransaction(user, openTransaction);
         return "redirect:/";
     }
-    //buy and sell crypto
-    //view transaction history
+
+    @GetMapping("/sell")
+    public String showSellForm(@RequestParam String currency, Model model, HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "AccessDenied";
+        }
+        TransactionDtoCreate dtoCreate = new TransactionDtoCreate();
+        dtoCreate.setCurrency(currency);
+        model.addAttribute("user", user);
+        model.addAttribute("transaction", dtoCreate);
+        model.addAttribute("currency", currency);
+        return "CreateSellTransaction";
+    }
+
+    @PostMapping("/sell")
+    public String createSellTransaction(
+            @Valid @ModelAttribute("transaction") TransactionDtoCreate transactionDtoCreate,
+            BindingResult errors,
+            HttpSession session) {
+
+        if (errors.hasErrors()) {
+            return "CreateSellTransaction";
+        }
+
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(session);
+            if (user.isBlocked()) {
+                return "BlockedView";
+            }
+        } catch (AuthenticationFailureException e) {
+            return "AccessDenied";
+        }
+
+        String currency = transactionDtoCreate.getCurrency();
+
+        List<Transaction> transactions = transactionService.filterTransactions(null, null, currency,
+                user, null, null);
+
+        double totalBought = transactions.stream()
+                .filter(t -> t.getStatus() == Status.BUY)
+                .mapToDouble(Transaction::getShares)
+                .sum();
+
+        double totalSold = transactions.stream()
+                .filter(t -> t.getStatus() == Status.SELL)
+                .mapToDouble(Transaction::getShares)
+                .sum();
+
+        double openAmount = totalBought - totalSold;
+
+        if (transactionDtoCreate.getShares() <= 0 || transactionDtoCreate.getShares() > openAmount) {
+            errors.rejectValue("shares", "shares.exceeds");
+            return "CreateSellTransaction";
+        }
+
+        double currentPrice = cryptoPricesFetch.getPriceForSymbol(currency).get();
+        double amount = transactionDtoCreate.getShares() * currentPrice;
+
+        transactionDtoCreate.setPriceAtPurchase(currentPrice);
+        transactionDtoCreate.setAmount(String.valueOf(amount));
+
+        Transaction transaction = transactionMapper.fromTransactionDTo(transactionDtoCreate);
+        transaction.setStatus(Status.SELL);
+
+        transactionService.createIncomingTransaction(user, transaction);
+
+        return "redirect:/transactions/all";
+    }
+
 }
