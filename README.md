@@ -66,5 +66,5 @@ Mockito
 
 
 ## Functionalities
-Main Page
-
+**Main Page**
+![Main Page](screenshots/main-page.png)
