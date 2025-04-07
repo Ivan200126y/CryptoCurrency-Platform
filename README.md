@@ -65,6 +65,7 @@ MariaDB
 Thymeleaf
 HTML5
 CSS
+JavaScript
 JUnit
 Mockito
 
